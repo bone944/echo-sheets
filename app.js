@@ -642,5 +642,5 @@ async function init() {
 
 init().catch((error) => {
   console.error(error);
-  alert("Errore nel caricamento dei dati. Assicurati di aprire l'app tramite http://localhost:8000 e non con doppio click sul file.");
+  alert("Errore reale: " + error.message);
 });
