@@ -1,0 +1,42 @@
+ID,Nome,Famiglia,Tipo,Rank,Rank Min,Rank Max,Costo,FP,Prereq_Type,Prereq_Target,Prereq_Value
+P-001,Angelo custode,Angelo custode,fixed,1,1,1,2,1,ability_pp,Scudo,3
+
+P-002,Form Animal 1,Form Animal,ranked,1,1,3,1,0,stat_min,Ingegno,1
+P-003,Form Animal 2,Form Animal,ranked,2,1,3,2,0,stat_min,Ingegno,1
+P-004,Form Animal 3,Form Animal,ranked,3,1,3,3,0,stat_min,Ingegno,1
+
+P-005,Form Acquam 1,Form Acquam,ranked,1,1,3,1,0,stat_min,Ingegno,1
+P-006,Form Acquam 2,Form Acquam,ranked,2,1,3,2,0,stat_min,Ingegno,1
+P-007,Form Acquam 3,Form Acquam,ranked,3,1,3,3,0,stat_min,Ingegno,1
+
+P-008,Form Auram 1,Form Auram,ranked,1,1,3,1,0,stat_min,Ingegno,1
+P-009,Form Auram 2,Form Auram,ranked,2,1,3,2,0,stat_min,Ingegno,1
+P-010,Form Auram 3,Form Auram,ranked,3,1,3,3,0,stat_min,Ingegno,1
+
+P-011,Form Corpus 1,Form Corpus,ranked,1,1,3,1,0,stat_min,Ingegno,1
+P-012,Form Corpus 2,Form Corpus,ranked,2,1,3,2,0,stat_min,Ingegno,1
+P-013,Form Corpus 3,Form Corpus,ranked,3,1,3,3,0,stat_min,Ingegno,1
+
+P-014,Form Herbam 1,Form Herbam,ranked,1,1,3,1,0,stat_min,Ingegno,1
+P-015,Form Herbam 2,Form Herbam,ranked,2,1,3,2,0,stat_min,Ingegno,1
+P-016,Form Herbam 3,Form Herbam,ranked,3,1,3,3,0,stat_min,Ingegno,1
+
+P-017,Form Ignem 1,Form Ignem,ranked,1,1,3,1,0,stat_min,Ingegno,1
+P-018,Form Ignem 2,Form Ignem,ranked,2,1,3,2,0,stat_min,Ingegno,1
+P-019,Form Ignem 3,Form Ignem,ranked,3,1,3,3,0,stat_min,Ingegno,1
+
+P-020,Form Imaginem 1,Form Imaginem,ranked,1,1,3,1,0,stat_min,Ingegno,1
+P-021,Form Imaginem 2,Form Imaginem,ranked,2,1,3,2,0,stat_min,Ingegno,1
+P-022,Form Imaginem 3,Form Imaginem,ranked,3,1,3,3,0,stat_min,Ingegno,1
+
+P-023,Form Mentem 1,Form Mentem,ranked,1,1,3,1,0,stat_min,Ingegno,1
+P-024,Form Mentem 2,Form Mentem,ranked,2,1,3,2,0,stat_min,Ingegno,1
+P-025,Form Mentem 3,Form Mentem,ranked,3,1,3,3,0,stat_min,Ingegno,1
+
+P-026,Form Terram 1,Form Terram,ranked,1,1,3,1,0,stat_min,Ingegno,1
+P-027,Form Terram 2,Form Terram,ranked,2,1,3,2,0,stat_min,Ingegno,1
+P-028,Form Terram 3,Form Terram,ranked,3,1,3,3,0,stat_min,Ingegno,1
+
+P-029,Form Vim 1,Form Vim,ranked,1,1,3,1,0,stat_min,Ingegno,1
+P-030,Form Vim 2,Form Vim,ranked,2,1,3,2,0,stat_min,Ingegno,1
+P-031,Form Vim 3,Form Vim,ranked,3,1,3,3,0,stat_min,Ingegno,1
