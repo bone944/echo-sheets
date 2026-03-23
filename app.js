@@ -102,7 +102,8 @@ function calculateDerived(character) {
 
 const repo = {
   getAll() {
-    return safeParseJSON(localStorage.getItem(STORAGE_KEYS.characters), []);
+    const parsed = safeParseJSON(localStorage.getItem(STORAGE_KEYS.characters), []);
+    return Array.isArray(parsed) ? parsed : [];
   },
 
   saveAll(data) {
@@ -609,7 +610,9 @@ function escapeHtml(value) {
 }
 
 function initState() {
-  state.characters = repo.getAll();
+  const loadedCharacters = repo.getAll();
+
+  state.characters = Array.isArray(loadedCharacters) ? loadedCharacters : [];
   state.activeId = repo.getActiveId();
 
   if (state.activeId && !state.characters.some((c) => c.id === state.activeId)) {
