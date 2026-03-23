@@ -1,0 +1,96 @@
+﻿ID;Categoria;Nome;Diff;Caratteristica;Pool Base;Cap;Kit;Core
+S-004;Fisiche;Acrobatica;H;AGI;1;5;FALSE;TRUE
+S-036;Interazione;Addestrare Animali;A;SPI;2;4;FALSE;TRUE
+S-048;Conoscenza;Agricoltura;A;ING;2;4;FALSE;FALSE
+S-061;Conoscenza;Alchimia;VH;ING;0;6;TRUE;TRUE
+S-045;Conoscenza;Amministrare;A;ING;2;4;FALSE;FALSE
+S-069;Conoscenza;Antropologia;H;ING;1;5;FALSE;FALSE
+S-070;Conoscenza;Archeologia;H;ING;1;5;FALSE;FALSE
+S-067;Conoscenza;Architettura;A;ING;2;4;FALSE;FALSE
+S-015;Fisiche;Armi Avanzate a Distanza;E;AGI;3;3;FALSE;TRUE
+S-016;Fisiche;Armi Avanzate da Mischia;A;AGI;2;4;FALSE;TRUE
+S-017;Fisiche;Armi Avanzate di Squadra;A;AGI;2;4;FALSE;FALSE
+S-007;Fisiche;Armi Bianche;A;VIG;2;4;FALSE;TRUE
+S-010;Fisiche;Armi da Fuoco;E;AGI;3;3;FALSE;TRUE
+S-011;Fisiche;Armi da Fuoco di Squadra;A;ING;2;4;FALSE;FALSE
+S-008;Fisiche;Armi da Tiro;A;AGI;2;4;FALSE;TRUE
+S-009;Fisiche;Armi da Tiro di Squadra;A;ING;2;4;FALSE;FALSE
+S-012;Fisiche;Armi Esplosive;A;ING;2;4;FALSE;TRUE
+S-013;Fisiche;Armi Ingegneristiche;A;VIG;2;4;FALSE;TRUE
+S-014;Fisiche;Armi Ingegneristiche di Squadra;A;ING;2;4;FALSE;FALSE
+S-031;Conoscenza;Artigianato;H;ING;1;5;TRUE;FALSE
+S-071;Conoscenza;Astronomia;H;ING;1;5;FALSE;FALSE
+S-002;Fisiche;Atletica;A;VIG;2;4;FALSE;TRUE
+S-050;Conoscenza;Attualità;E;ING;3;3;FALSE;FALSE
+S-081;Conoscenza;Biologia;VH;ING;0;6;FALSE;FALSE
+S-019;Conoscenza;Camuffare;A;ING;2;4;TRUE;TRUE
+S-029;Conoscenza;Carpenteria;E;ING;3;3;TRUE;FALSE
+S-001;Fisiche;Cavalcare;A;AGI;2;4;FALSE;FALSE
+S-084;Interazione;Chiacchiera;A;SPI;2;4;FALSE;TRUE
+S-072;Conoscenza;Chimica;H;ING;1;5;FALSE;FALSE
+S-092;Conoscenza;Computer;E;ING;3;3;FALSE;TRUE
+S-040;Conoscenza;Concentrazione;A;SPI;2;4;FALSE;TRUE
+S-041;Conoscenza;Conoscenza Locale;E;ING;3;3;FALSE;FALSE
+S-025;Conoscenza;Contraffare;H;ING;1;5;TRUE;FALSE
+S-033;Conoscenza;Cucinare;A;ING;2;4;FALSE;FALSE
+S-090;Interazione;Diplomazia;H;SPI;1;5;FALSE;FALSE
+S-052;Conoscenza;Economia;H;ING;1;5;FALSE;FALSE
+S-047;Conoscenza;Elettronica;A;ING;2;4;TRUE;FALSE
+S-060;Conoscenza;Esorcismo;H;SPI;1;5;FALSE;TRUE
+S-043;Conoscenza;Faccende Domestiche;E;ING;3;3;FALSE;FALSE
+S-058;Conoscenza;Filosofia;H;ING;1;5;FALSE;FALSE
+S-082;Conoscenza;Fisica;VH;ING;0;6;FALSE;FALSE
+S-027;Conoscenza;Forgia;A;ING;2;4;TRUE;FALSE
+S-018;Fisiche;Furtività;A;AGI;2;4;FALSE;TRUE
+S-053;Conoscenza;Geografia;H;ING;1;5;FALSE;FALSE
+S-074;Conoscenza;Geologia;H;ING;1;5;FALSE;FALSE
+S-051;Conoscenza;Giardinaggio;E;ING;3;3;FALSE;FALSE
+S-042;Conoscenza;Giochi;E;ING;3;3;FALSE;FALSE
+S-095;Conoscenza;Hacking;VH;ING;0;6;FALSE;FALSE
+S-020;Consapevolezza;Indagare;A;ING;2;4;FALSE;TRUE
+S-083;Interazione;Inganno;A;SPI;2;4;FALSE;TRUE
+S-073;Conoscenza;Ingegneria;H;ING;1;5;FALSE;FALSE
+S-035;Conoscenza;Insegnare;A;ING;2;4;FALSE;FALSE
+S-046;Conoscenza;Intenditore;A;ING;2;4;FALSE;FALSE
+S-085;Interazione;Intimidire;A;SPI;2;4;FALSE;TRUE
+S-088;Consapevolezza;Intuire;E;SPI;3;3;FALSE;TRUE
+S-055;Conoscenza;Legge;H;ING;1;5;FALSE;FALSE
+S-057;Conoscenza;Letteratura;H;ING;1;5;FALSE;FALSE
+S-056;Conoscenza;Lingue;H;ING;1;5;FALSE;FALSE
+S-075;Conoscenza;Matematica;H;ING;1;5;FALSE;FALSE
+S-026;Conoscenza;Meccanica;A;ING;2;4;TRUE;FALSE
+S-076;Conoscenza;Medicina;H;ING;1;5;TRUE;TRUE
+S-086;Interazione;Mercanteggiare;A;SPI;2;4;FALSE;FALSE
+S-077;Conoscenza;Metallurgia;H;ING;1;5;FALSE;TRUE
+S-030;Conoscenza;Muratura;E;ING;3;3;TRUE;FALSE
+S-068;Conoscenza;Natura;A;ING;2;4;TRUE;FALSE
+S-059;Conoscenza;Occultismo;A;ING;2;4;FALSE;TRUE
+S-078;Conoscenza;Paleontologia;H;ING;1;5;FALSE;FALSE
+S-022;Consapevolezza;Pedinare;A;ING;2;4;FALSE;FALSE
+S-037;Consapevolezza;Percepire;A;SPI;2;4;FALSE;TRUE
+S-038;Interazione;Performance;A;SPI;2;4;FALSE;TRUE
+S-087;Interazione;Persuasione;A;SPI;2;4;FALSE;TRUE
+S-094;Conoscenza;Programmazione;H;ING;1;5;FALSE;FALSE
+S-079;Conoscenza;Psicologia;H;ING;1;5;FALSE;FALSE
+S-024;Fisiche;Rapidità di Mano;H;AGI;1;5;FALSE;TRUE
+S-049;Conoscenza;Religione;A;ING;2;4;FALSE;TRUE
+S-034;Consapevolezza;Ricercare;A;ING;2;4;FALSE;FALSE
+S-005;Fisiche;Rissa;E;VIG;3;3;FALSE;TRUE
+S-028;Conoscenza;Sartoria;E;AGI;3;3;TRUE;FALSE
+S-089;Consapevolezza;Sbugiardare;H;ING;1;5;FALSE;TRUE
+S-021;Conoscenza;Scassinare;A;ING;2;4;TRUE;TRUE
+S-044;Conoscenza;Scrivere;A;ING;2;4;FALSE;FALSE
+S-006;Fisiche;Scudo;E;VIG;3;3;FALSE;TRUE
+S-080;Conoscenza;Sociologia;H;ING;1;5;FALSE;FALSE
+S-093;Conoscenza;Software;A;ING;2;4;FALSE;FALSE
+S-039;Consapevolezza;Sopravvivenza;A;SPI;2;4;FALSE;TRUE
+S-003;Fisiche;Sport;A;VIG;2;4;FALSE;FALSE
+S-054;Conoscenza;Storia;H;ING;1;5;FALSE;TRUE
+S-062;Magiche;Technique Creo;VH;ING;0;6;FALSE;TRUE
+S-063;Magiche;Technique Intellego;VH;ING;0;6;FALSE;TRUE
+S-064;Magiche;Technique Muto;VH;ING;0;6;FALSE;TRUE
+S-065;Magiche;Technique Perdo;VH;ING;0;6;FALSE;TRUE
+S-066;Magiche;Technique Rego;VH;ING;0;6;FALSE;TRUE
+S-023;Conoscenza;Trappole;A;ING;2;4;TRUE;TRUE
+S-091;Fisiche;Uso Tuta;A;AGI;2;4;FALSE;FALSE
+S-032;Fisiche;Uso Veicolo;A;AGI;2;4;FALSE;TRUE

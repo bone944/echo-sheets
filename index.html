@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ECHO Sheet</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar__brand">
+        <span class="brand-mark">E</span>
+        <div class="brand-copy">
+          <h1>ECHO Sheet</h1>
+          <p>Prototype v0.1</p>
+        </div>
+      </div>
+
+      <div class="topbar__actions">
+        <button id="goHomeButton" class="btn btn--ghost" type="button">
+          Personaggi
+        </button>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <!-- HOME -->
+      <section id="screen-home" class="screen screen--active">
+        <div class="panel">
+          <div class="panel__header">
+            <div>
+              <h2>I tuoi personaggi</h2>
+              <p class="panel__subtitle">
+                In questa fase i dati vengono salvati nel browser, ma la struttura è già pensata per il cloud.
+              </p>
+            </div>
+
+            <button id="newCharacterButton" class="btn btn--primary" type="button">
+              Nuovo personaggio
+            </button>
+          </div>
+
+          <div class="meta-row">
+            <div class="meta-card">
+              <span class="meta-card__label">Ruolo</span>
+              <span id="currentRoleLabel" class="meta-card__value">Giocatore</span>
+            </div>
+
+            <div class="meta-card">
+              <span class="meta-card__label">Salvataggio</span>
+              <span id="storageModeLabel" class="meta-card__value">Locale</span>
+            </div>
+          </div>
+
+          <div id="characterList" class="character-list"></div>
+
+          <div id="emptyState" class="empty-state">
+            <h3>Nessun personaggio creato</h3>
+            <p>Crea il primo personaggio per iniziare a testare la scheda.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- EDITOR -->
+      <section id="screen-editor" class="screen">
+        <div class="editor-header panel">
+          <div class="editor-header__main">
+            <div class="field-group">
+              <label for="characterName">Nome personaggio</label>
+              <input
+                id="characterName"
+                name="characterName"
+                type="text"
+                placeholder="Inserisci un nome"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="field-grid field-grid--compact">
+              <div class="field-group">
+                <label for="characterType">Tipo profilo</label>
+                <select id="characterType" name="characterType">
+                  <option value="player">Giocatore</option>
+                  <option value="gm">GM</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="ppMax">PP Max</label>
+                <input
+                  id="ppMax"
+                  name="ppMax"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value="12"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="editor-header__actions">
+            <button id="saveCharacterButton" class="btn btn--primary" type="button">
+              Salva
+            </button>
+            <button id="duplicateCharacterButton" class="btn btn--secondary" type="button">
+              Duplica
+            </button>
+            <button id="deleteCharacterButton" class="btn btn--danger" type="button">
+              Elimina
+            </button>
+          </div>
+        </div>
+
+        <section class="summary-grid">
+          <article class="summary-card">
+            <span class="summary-card__label">PP Spesi</span>
+            <span id="ppSpent" class="summary-card__value">0</span>
+          </article>
+
+          <article class="summary-card">
+            <span class="summary-card__label">PP Max</span>
+            <span id="ppMaxDisplay" class="summary-card__value">12</span>
+          </article>
+
+          <article class="summary-card">
+            <span class="summary-card__label">Tempra</span>
+            <span id="tempra" class="summary-card__value">0</span>
+          </article>
+
+          <article class="summary-card">
+            <span class="summary-card__label">Evasione</span>
+            <span id="evasione" class="summary-card__value">0</span>
+          </article>
+
+          <article class="summary-card">
+            <span class="summary-card__label">Mente</span>
+            <span id="mente" class="summary-card__value">0</span>
+          </article>
+
+          <article class="summary-card">
+            <span class="summary-card__label">Risolutezza</span>
+            <span id="risolutezza" class="summary-card__value">0</span>
+          </article>
+        </section>
+
+        <section class="panel">
+          <div class="panel__header panel__header--stacked">
+            <div>
+              <h2>Caratteristiche</h2>
+              <p class="panel__subtitle">
+                Base del personaggio. Da qui derivano difese e costo PP.
+              </p>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field-group">
+              <label for="vigore">Vigore</label>
+              <input id="vigore" name="vigore" type="number" min="-5" max="5" step="1" value="0" />
+            </div>
+
+            <div class="field-group">
+              <label for="agilita">Agilità</label>
+              <input id="agilita" name="agilita" type="number" min="-5" max="5" step="1" value="0" />
+            </div>
+
+            <div class="field-group">
+              <label for="ingegno">Ingegno</label>
+              <input id="ingegno" name="ingegno" type="number" min="-5" max="5" step="1" value="0" />
+            </div>
+
+            <div class="field-group">
+              <label for="spirito">Spirito</label>
+              <input id="spirito" name="spirito" type="number" min="-5" max="5" step="1" value="0" />
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel__header panel__header--stacked">
+            <div>
+              <h2>Difese derivate</h2>
+              <p class="panel__subtitle">
+                Questi valori sono automatici e vengono ricalcolati in base alle caratteristiche.
+              </p>
+            </div>
+          </div>
+
+          <div class="output-grid">
+            <div class="output-box">
+              <span class="output-box__label">Tempra</span>
+              <span id="tempraLarge" class="output-box__value">0</span>
+            </div>
+
+            <div class="output-box">
+              <span class="output-box__label">Evasione</span>
+              <span id="evasioneLarge" class="output-box__value">0</span>
+            </div>
+
+            <div class="output-box">
+              <span class="output-box__label">Mente</span>
+              <span id="menteLarge" class="output-box__value">0</span>
+            </div>
+
+            <div class="output-box">
+              <span class="output-box__label">Risolutezza</span>
+              <span id="risolutezzaLarge" class="output-box__value">0</span>
+            </div>
+          </div>
+        </section>
+
+       <section class="panel">
+  <div class="panel__header">
+    <div>
+      <h2>Abilità</h2>
+      <p class="panel__subtitle">
+        Nome e Pool sono in primo piano. Il resto resta leggibile ma secondario.
+      </p>
+    </div>
+
+    <button id="addAbilityRowButton" class="btn btn--secondary" type="button">
+      Aggiungi riga
+    </button>
+  </div>
+
+  <div id="abilitiesList" class="abilities-list">
+    <div class="ability-card" data-row-index="0">
+      <div class="field-group ability-card__name">
+        <label>Abilità</label>
+        <select class="ability-name" data-field="abilityId">
+          <option value="">Seleziona abilità</option>
+        </select>
+      </div>
+
+      <div class="ability-card__pool-wrap">
+        <span class="ability-card__pool-label">Pool</span>
+        <span class="ability-pool ability-card__pool">0d6</span>
+      </div>
+
+      <div class="ability-card__meta">
+        <div class="field-group ability-card__pp">
+          <label>PP</label>
+          <input
+            class="ability-points"
+            data-field="spentPoints"
+            type="number"
+            min="0"
+            max="6"
+            step="1"
+            value="0"
+          />
+        </div>
+
+        <div class="ability-mini-box">
+          <span class="ability-mini-box__label">Diff</span>
+          <span class="ability-diff">—</span>
+        </div>
+
+        <div class="ability-mini-box">
+          <span class="ability-mini-box__label">Car</span>
+          <span class="ability-car">—</span>
+        </div>
+
+        <div class="ability-mini-box">
+          <span class="ability-mini-box__label">Cap</span>
+          <span class="ability-cap">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <section class="panel">
+          <div class="panel__header panel__header--stacked">
+            <div>
+              <h2>Stato salvataggio</h2>
+              <p class="panel__subtitle">
+                Per ora salviamo in locale, ma questa area verrà poi collegata al cloud.
+              </p>
+            </div>
+          </div>
+
+          <div class="status-box">
+            <p id="saveStatusMessage">Nessuna modifica recente.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
