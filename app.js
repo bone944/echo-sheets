@@ -102,8 +102,7 @@ function calculateDerived(character) {
 
 const repo = {
   getAll() {
-    const parsed = safeParseJSON(localStorage.getItem(STORAGE_KEYS.characters), []);
-    return Array.isArray(parsed) ? parsed : [];
+    return safeParseJSON(localStorage.getItem(STORAGE_KEYS.characters), []);
   },
 
   saveAll(data) {
@@ -611,11 +610,14 @@ function escapeHtml(value) {
 
 function initState() {
   const loadedCharacters = repo.getAll();
+  const loadedActiveId = repo.getActiveId();
 
   state.characters = Array.isArray(loadedCharacters) ? loadedCharacters : [];
-  state.activeId = repo.getActiveId();
+  state.activeId = typeof loadedActiveId === "string" && loadedActiveId.trim() !== ""
+    ? loadedActiveId
+    : null;
 
-  if (state.activeId && !state.characters.some((c) => c.id === state.activeId)) {
+  if (state.activeId && !state.characters.some((c) => c && c.id === state.activeId)) {
     state.activeId = null;
   }
 
