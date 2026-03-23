@@ -745,3 +745,102 @@ button {
     justify-content: flex-start;
   }
 }
+.talent-card {
+  background: #0f1320;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.talent-card__top {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.talent-card__name {
+  min-width: 0;
+}
+
+.talent-card__name label {
+  margin-bottom: 4px;
+}
+
+.talent-card__name select {
+  min-height: 44px;
+}
+
+.talent-card__cost-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  min-width: 72px;
+}
+
+.talent-card__cost-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.talent-card__cost {
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.talent-card__meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.talent-card__rank-controls {
+  display: grid;
+  grid-template-columns: 36px 1fr 36px;
+  gap: 6px;
+  align-items: center;
+}
+
+.talent-card__rank-value {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.talent-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .talent-card__top {
+    grid-template-columns: 1fr;
+  }
+
+  .talent-card__cost-wrap {
+    align-items: flex-start;
+  }
+
+  .talent-card__meta {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .talent-card__actions {
+    justify-content: flex-start;
+  }
+}
