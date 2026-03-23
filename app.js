@@ -16,8 +16,13 @@ function generateId(prefix = "id") {
 }
 
 function safeParseJSON(value, fallback) {
+  if (typeof value !== "string" || value.trim() === "") {
+    return fallback;
+  }
+
   try {
-    return JSON.parse(value);
+    const parsed = JSON.parse(value);
+    return parsed ?? fallback;
   } catch {
     return fallback;
   }
@@ -30,6 +35,15 @@ function toInt(value, fallback = 0) {
 
 function truncateHalf(value) {
   return Math.trunc(value / 2);
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function createEmptyCharacter() {
@@ -77,6 +91,60 @@ function createEmptyCharacter() {
   };
 }
 
+function normalizeCharacter(raw) {
+  if (!raw || typeof raw !== "object") {
+    return createEmptyCharacter();
+  }
+
+  return {
+    id: raw.id || generateId("char"),
+    name: raw.name || "Nuovo personaggio",
+    profileType: raw.profileType || "player",
+    ppMax: toInt(raw.ppMax, DEFAULT_PP_MAX),
+
+    stats: {
+      vigore: toInt(raw?.stats?.vigore, 0),
+      agilita: toInt(raw?.stats?.agilita, 0),
+      ingegno: toInt(raw?.stats?.ingegno, 0),
+      spirito: toInt(raw?.stats?.spirito, 0),
+    },
+
+    abilities: Array.isArray(raw.abilities) && raw.abilities.length > 0
+      ? raw.abilities.map((row) => ({
+          abilityId: row?.abilityId || "",
+          spentPoints: toInt(row?.spentPoints, 0),
+        }))
+      : [
+          {
+            abilityId: "",
+            spentPoints: 0,
+          },
+        ],
+
+    talents: Array.isArray(raw.talents) ? raw.talents : [],
+    inventory: Array.isArray(raw.inventory) ? raw.inventory : [],
+    weapons: Array.isArray(raw.weapons) ? raw.weapons : [],
+
+    magic: {
+      techniqueId: raw?.magic?.techniqueId ?? null,
+      formId: raw?.magic?.formId ?? null,
+    },
+
+    wealth: {
+      initialLevel: toInt(raw?.wealth?.initialLevel, 0),
+      currentLevel: toInt(raw?.wealth?.currentLevel, 0),
+      rewards: Array.isArray(raw?.wealth?.rewards) ? raw.wealth.rewards : [],
+    },
+
+    conditions: Array.isArray(raw.conditions) ? raw.conditions : [],
+
+    meta: {
+      createdAt: raw?.meta?.createdAt || new Date().toISOString(),
+      updatedAt: raw?.meta?.updatedAt || new Date().toISOString(),
+    },
+  };
+}
+
 function calculateDerived(character) {
   const { vigore, agilita, ingegno, spirito } = character.stats;
 
@@ -102,7 +170,10 @@ function calculateDerived(character) {
 
 const repo = {
   getAll() {
-    return safeParseJSON(localStorage.getItem(STORAGE_KEYS.characters), []);
+    const raw = localStorage.getItem(STORAGE_KEYS.characters);
+    const parsed = safeParseJSON(raw, []);
+    if (!Array.isArray(parsed)) return [];
+    return parsed;
   },
 
   saveAll(data) {
@@ -110,10 +181,16 @@ const repo = {
   },
 
   getActiveId() {
-    return localStorage.getItem(STORAGE_KEYS.activeCharacterId);
+    const raw = localStorage.getItem(STORAGE_KEYS.activeCharacterId);
+    return typeof raw === "string" && raw.trim() !== "" ? raw : null;
   },
 
   setActiveId(id) {
+    if (!id) {
+      localStorage.removeItem(STORAGE_KEYS.activeCharacterId);
+      return;
+    }
+
     localStorage.setItem(STORAGE_KEYS.activeCharacterId, id);
   },
 };
@@ -176,12 +253,14 @@ function getActiveChar() {
 
 function show(screen) {
   Object.values(dom.screens).forEach((s) => s.classList.remove("screen--active"));
-  dom.screens[screen].classList.add("screen--active");
+  if (dom.screens[screen]) {
+    dom.screens[screen].classList.add("screen--active");
+  }
 }
 
 function saveAll() {
   repo.saveAll(state.characters);
-  if (state.activeId) repo.setActiveId(state.activeId);
+  repo.setActiveId(state.activeId);
 }
 
 function findAbilityById(abilityId) {
@@ -233,7 +312,7 @@ function calculateAbilityRow(character, row) {
 function renderList() {
   dom.list.innerHTML = "";
 
-  if (state.characters.length === 0) {
+  if (!Array.isArray(state.characters) || state.characters.length === 0) {
     dom.empty.classList.remove("hidden");
     return;
   }
@@ -249,10 +328,10 @@ function renderList() {
     el.innerHTML = `
       <div>
         <strong>${escapeHtml(c.name)}</strong><br>
-        <small>${c.profileType} · PP ${d.ppSpent}/${c.ppMax}</small>
+        <small>${escapeHtml(c.profileType)} · PP ${d.ppSpent}/${c.ppMax}</small>
       </div>
       <div class="character-card__actions">
-        <button class="btn btn--primary" data-id="${c.id}" data-action="open">Apri</button>
+        <button class="btn btn--primary" data-id="${escapeHtml(c.id)}" data-action="open">Apri</button>
       </div>
     `;
 
@@ -275,11 +354,11 @@ function buildAbilityOptions(selectedId = "") {
 
 function renderAbilities() {
   const character = getActiveChar();
-  if (!character) return;
+  if (!character || !dom.abilitiesList) return;
 
   dom.abilitiesList.innerHTML = "";
 
-  character.abilities.forEach((row, index) => {
+  (character.abilities || []).forEach((row, index) => {
     const computed = calculateAbilityRow(character, row);
 
     const rowEl = document.createElement("div");
@@ -449,6 +528,11 @@ function handleAbilityChange(event) {
   if (!select) return;
 
   const rowIndex = toInt(select.dataset.rowIndex, 0);
+
+  if (!character.abilities[rowIndex]) {
+    character.abilities[rowIndex] = { abilityId: "", spentPoints: 0 };
+  }
+
   character.abilities[rowIndex].abilityId = select.value;
   character.meta.updatedAt = new Date().toISOString();
 
@@ -465,6 +549,11 @@ function handleAbilityPointsChange(event) {
   if (!input) return;
 
   const rowIndex = toInt(input.dataset.rowIndex, 0);
+
+  if (!character.abilities[rowIndex]) {
+    character.abilities[rowIndex] = { abilityId: "", spentPoints: 0 };
+  }
+
   character.abilities[rowIndex].spentPoints = toInt(input.value, 0);
   character.meta.updatedAt = new Date().toISOString();
 
@@ -533,6 +622,11 @@ function parseCSV(csvText) {
 
 async function loadAbilitiesCatalog() {
   const response = await fetch("./data/abilita.csv");
+
+  if (!response.ok) {
+    throw new Error(`Impossibile caricare abilita.csv (${response.status})`);
+  }
+
   const csvText = await response.text();
   const parsed = parseCSV(csvText);
 
@@ -599,23 +693,18 @@ function bindEvents() {
   });
 }
 
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
 function initState() {
   const loadedCharacters = repo.getAll();
   const loadedActiveId = repo.getActiveId();
 
-  state.characters = Array.isArray(loadedCharacters) ? loadedCharacters : [];
-  state.activeId = typeof loadedActiveId === "string" && loadedActiveId.trim() !== ""
-    ? loadedActiveId
-    : null;
+  state.characters = Array.isArray(loadedCharacters)
+    ? loadedCharacters.map(normalizeCharacter)
+    : [];
+
+  state.activeId =
+    typeof loadedActiveId === "string" && loadedActiveId.trim() !== ""
+      ? loadedActiveId
+      : null;
 
   if (state.activeId && !state.characters.some((c) => c && c.id === state.activeId)) {
     state.activeId = null;
