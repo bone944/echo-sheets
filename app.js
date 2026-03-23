@@ -576,46 +576,64 @@ function addAbilityRow() {
   renderEditor();
 }
 
+function detectDelimiter(firstLine) {
+  const semicolons = (firstLine.match(/;/g) || []).length;
+  const commas = (firstLine.match(/,/g) || []).length;
+  const tabs = (firstLine.match(/\t/g) || []).length;
+
+  if (semicolons >= commas && semicolons >= tabs) return ";";
+  if (tabs >= commas && tabs >= semicolons) return "\t";
+  return ",";
+}
+
+function parseCSVLine(line, delimiter) {
+  const cells = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const next = line[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && next === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === delimiter && !inQuotes) {
+      cells.push(current.trim());
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+
+  cells.push(current.trim());
+  return cells;
+}
+
 function parseCSV(csvText) {
-  const lines = csvText.trim().split(/\r?\n/);
+  const lines = csvText
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+
   if (lines.length < 2) return [];
 
-  const rows = lines.map((line) => {
-    const cells = [];
-    let current = "";
-    let inQuotes = false;
+  const delimiter = detectDelimiter(lines[0]);
+  const headers = parseCSVLine(lines[0], delimiter);
+  const dataRows = lines.slice(1);
 
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-      const next = line[i + 1];
-
-      if (char === '"') {
-        if (inQuotes && next === '"') {
-          current += '"';
-          i++;
-        } else {
-          inQuotes = !inQuotes;
-        }
-      } else if (char === "," && !inQuotes) {
-        cells.push(current);
-        current = "";
-      } else {
-        current += char;
-      }
-    }
-
-    cells.push(current);
-    return cells.map((cell) => cell.trim());
-  });
-
-  const headers = rows[0];
-  const dataRows = rows.slice(1);
-
-  return dataRows.map((row) => {
+  return dataRows.map((line) => {
+    const values = parseCSVLine(line, delimiter);
     const record = {};
+
     headers.forEach((header, index) => {
-      record[header] = row[index] ?? "";
+      record[header] = values[index] ?? "";
     });
+
     return record;
   });
 }
@@ -630,7 +648,8 @@ async function loadAbilitiesCatalog() {
   const csvText = await response.text();
   const parsed = parseCSV(csvText);
 
-  state.abilitiesCatalog = parsed.map((row) => ({
+ state.abilitiesCatalog = parsed
+  .map((row) => ({
     id: row.ID,
     categoria: row.Categoria,
     nome: row.Nome,
@@ -640,7 +659,8 @@ async function loadAbilitiesCatalog() {
     cap: toInt(row.Cap, 0),
     kit: row.Kit === "TRUE",
     core: row.Core === "TRUE",
-  }));
+  }))
+  .filter((row) => row.id && row.nome);
 }
 
 function bindEvents() {
