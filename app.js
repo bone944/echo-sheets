@@ -9,6 +9,9 @@ const state = {
   characters: [],
   activeId: null,
   abilitiesCatalog: [],
+  ui: {
+    abilitiesEditMode: false,
+  },
 };
 
 function generateId(prefix = "id") {
@@ -172,8 +175,7 @@ const repo = {
   getAll() {
     const raw = localStorage.getItem(STORAGE_KEYS.characters);
     const parsed = safeParseJSON(raw, []);
-    if (!Array.isArray(parsed)) return [];
-    return parsed;
+    return Array.isArray(parsed) ? parsed : [];
   },
 
   saveAll(data) {
@@ -209,6 +211,7 @@ const dom = {
     save: document.getElementById("saveCharacterButton"),
     home: document.getElementById("goHomeButton"),
     addAbilityRow: document.getElementById("addAbilityRowButton"),
+    toggleAbilitiesEdit: document.getElementById("toggleAbilitiesEdit"),
     duplicateCharacter: document.getElementById("duplicateCharacterButton"),
     deleteCharacter: document.getElementById("deleteCharacterButton"),
   },
@@ -245,6 +248,7 @@ const dom = {
   },
 
   abilitiesList: document.getElementById("abilitiesList"),
+  abilitiesControls: document.getElementById("abilitiesControls"),
 };
 
 function getActiveChar() {
@@ -267,19 +271,32 @@ function findAbilityById(abilityId) {
   return state.abilitiesCatalog.find((a) => a.id === abilityId) || null;
 }
 
-function getStatValueByCode(character, code) {
-  switch (code) {
-    case "VIG":
-      return toInt(character.stats.vigore, 0);
-    case "AGI":
-      return toInt(character.stats.agilita, 0);
-    case "ING":
-      return toInt(character.stats.ingegno, 0);
-    case "SPI":
-      return toInt(character.stats.spirito, 0);
-    default:
-      return 0;
-  }
+function getSelectedAbilityIds(character, excludeRowIndex = -1) {
+  return (character.abilities || [])
+    .map((row, index) => (index === excludeRowIndex ? "" : row.abilityId))
+    .filter(Boolean);
+}
+
+function getAvailableAbilitiesForRow(character, rowIndex) {
+  const currentAbilityId = character.abilities[rowIndex]?.abilityId || "";
+  const takenIds = new Set(getSelectedAbilityIds(character, rowIndex));
+
+  return [...state.abilitiesCatalog]
+    .filter((ability) => !takenIds.has(ability.id) || ability.id === currentAbilityId)
+    .sort((a, b) => a.nome.localeCompare(b.nome, "it"));
+}
+
+function buildAbilityOptions(character, rowIndex, selectedId = "") {
+  const options = ['<option value="">Seleziona abilità</option>'];
+
+  getAvailableAbilitiesForRow(character, rowIndex).forEach((ability) => {
+    const selected = ability.id === selectedId ? "selected" : "";
+    options.push(
+      `<option value="${escapeHtml(ability.id)}" ${selected}>${escapeHtml(ability.nome)}</option>`
+    );
+  });
+
+  return options.join("");
 }
 
 function calculateAbilityRow(character, row) {
@@ -287,25 +304,30 @@ function calculateAbilityRow(character, row) {
 
   if (!ability) {
     return {
+      categoria: "—",
       diff: "—",
       car: "—",
       pool: "0d6",
       cap: "—",
       overCap: false,
+      canIncrease: false,
+      canDecrease: false,
     };
   }
 
   const spentPoints = toInt(row.spentPoints, 0);
-  const statValue = getStatValueByCode(character, ability.car);
   const poolTotal = ability.poolBase + spentPoints;
+  const overCap = spentPoints > ability.cap;
 
   return {
+    categoria: ability.categoria,
     diff: ability.diff,
     car: ability.car,
     pool: `${poolTotal}d6`,
     cap: ability.cap,
-    overCap: spentPoints > ability.cap,
-    statValue,
+    overCap,
+    canIncrease: spentPoints < ability.cap,
+    canDecrease: spentPoints > 0,
   };
 }
 
@@ -339,19 +361,6 @@ function renderList() {
   });
 }
 
-function buildAbilityOptions(selectedId = "") {
-  const options = ['<option value="">Seleziona abilità</option>'];
-
-  state.abilitiesCatalog.forEach((ability) => {
-    const selected = ability.id === selectedId ? "selected" : "";
-    options.push(
-      `<option value="${escapeHtml(ability.id)}" ${selected}>${escapeHtml(ability.nome)}</option>`
-    );
-  });
-
-  return options.join("");
-}
-
 function renderAbilities() {
   const character = getActiveChar();
   if (!character || !dom.abilitiesList) return;
@@ -360,36 +369,48 @@ function renderAbilities() {
 
   (character.abilities || []).forEach((row, index) => {
     const computed = calculateAbilityRow(character, row);
+    const abilityExists = !!row.abilityId;
 
     const rowEl = document.createElement("div");
     rowEl.className = `ability-card${computed.overCap ? " is-danger" : ""}`;
     rowEl.dataset.rowIndex = index;
 
     rowEl.innerHTML = `
-      <div class="field-group ability-card__name">
-        <label>Abilità</label>
-        <select class="ability-name" data-row-index="${index}">
-          ${buildAbilityOptions(row.abilityId)}
-        </select>
+      <div class="ability-card__top">
+        <div class="field-group ability-card__name">
+          <label>Abilità</label>
+          <select class="ability-name" data-row-index="${index}" ${state.ui.abilitiesEditMode ? "" : "disabled"}>
+            ${buildAbilityOptions(character, index, row.abilityId)}
+          </select>
+          <span class="ability-card__category">${escapeHtml(computed.categoria)}</span>
+        </div>
+
+        <div class="ability-card__pool-wrap">
+          <span class="ability-card__pool-label">Pool</span>
+          <span class="ability-pool ability-card__pool">${computed.pool}</span>
+        </div>
       </div>
 
-      <div class="ability-card__pool-wrap">
-        <span class="ability-card__pool-label">Pool</span>
-        <span class="ability-pool ability-card__pool">${computed.pool}</span>
-      </div>
-
-      <div class="ability-card__meta">
+      <div class="ability-card__bottom">
         <div class="field-group ability-card__pp">
           <label>PP</label>
-          <input
-            class="ability-points"
-            data-row-index="${index}"
-            type="number"
-            min="0"
-            max="6"
-            step="1"
-            value="${toInt(row.spentPoints, 0)}"
-          />
+          <div class="ability-card__pp-controls">
+            <button
+              class="ability-stepper ability-stepper--minus"
+              data-row-index="${index}"
+              type="button"
+              ${!state.ui.abilitiesEditMode || !computed.canDecrease ? "disabled" : ""}
+            >−</button>
+
+            <div class="ability-card__pp-value">${toInt(row.spentPoints, 0)}</div>
+
+            <button
+              class="ability-stepper ability-stepper--plus"
+              data-row-index="${index}"
+              type="button"
+              ${!state.ui.abilitiesEditMode || !computed.canIncrease ? "disabled" : ""}
+            >+</button>
+          </div>
         </div>
 
         <div class="ability-mini-box">
@@ -406,11 +427,29 @@ function renderAbilities() {
           <span class="ability-mini-box__label">Cap</span>
           <span class="ability-cap">${computed.cap}</span>
         </div>
+
+        <div class="ability-card__actions ${state.ui.abilitiesEditMode ? "" : "hidden"}">
+          <button
+            class="icon-btn icon-btn--danger ability-delete"
+            data-row-index="${index}"
+            type="button"
+            ${character.abilities.length <= 1 && !abilityExists ? "disabled" : ""}
+            title="Elimina riga"
+          >🗑</button>
+        </div>
       </div>
     `;
 
     dom.abilitiesList.appendChild(rowEl);
   });
+
+  if (dom.abilitiesControls) {
+    dom.abilitiesControls.classList.toggle("hidden", !state.ui.abilitiesEditMode);
+  }
+
+  if (dom.buttons.toggleAbilitiesEdit) {
+    dom.buttons.toggleAbilitiesEdit.textContent = state.ui.abilitiesEditMode ? "Fine modifica" : "Modifica";
+  }
 }
 
 function renderEditor() {
@@ -534,6 +573,14 @@ function handleAbilityChange(event) {
   }
 
   character.abilities[rowIndex].abilityId = select.value;
+  character.abilities[rowIndex].spentPoints = Math.max(
+    0,
+    Math.min(
+      toInt(character.abilities[rowIndex].spentPoints, 0),
+      toInt(findAbilityById(select.value)?.cap, 0)
+    )
+  );
+
   character.meta.updatedAt = new Date().toISOString();
 
   saveAll();
@@ -541,20 +588,22 @@ function handleAbilityChange(event) {
   renderList();
 }
 
-function handleAbilityPointsChange(event) {
+function changeAbilityPoints(rowIndex, delta) {
   const character = getActiveChar();
   if (!character) return;
+  if (!character.abilities[rowIndex]) return;
 
-  const input = event.target.closest(".ability-points");
-  if (!input) return;
+  const row = character.abilities[rowIndex];
+  const ability = findAbilityById(row.abilityId);
+  if (!ability) return;
 
-  const rowIndex = toInt(input.dataset.rowIndex, 0);
+  const current = toInt(row.spentPoints, 0);
+  const next = current + delta;
 
-  if (!character.abilities[rowIndex]) {
-    character.abilities[rowIndex] = { abilityId: "", spentPoints: 0 };
-  }
+  if (next < 0) return;
+  if (next > ability.cap) return;
 
-  character.abilities[rowIndex].spentPoints = toInt(input.value, 0);
+  row.spentPoints = next;
   character.meta.updatedAt = new Date().toISOString();
 
   saveAll();
@@ -566,6 +615,9 @@ function addAbilityRow() {
   const character = getActiveChar();
   if (!character) return;
 
+  const lastRow = character.abilities[character.abilities.length - 1];
+  if (lastRow && !lastRow.abilityId) return;
+
   character.abilities.push({
     abilityId: "",
     spentPoints: 0,
@@ -574,6 +626,31 @@ function addAbilityRow() {
   character.meta.updatedAt = new Date().toISOString();
   saveAll();
   renderEditor();
+}
+
+function deleteAbilityRow(rowIndex) {
+  const character = getActiveChar();
+  if (!character) return;
+  if (!character.abilities[rowIndex]) return;
+
+  character.abilities.splice(rowIndex, 1);
+
+  if (character.abilities.length === 0) {
+    character.abilities.push({
+      abilityId: "",
+      spentPoints: 0,
+    });
+  }
+
+  character.meta.updatedAt = new Date().toISOString();
+  saveAll();
+  renderEditor();
+  renderList();
+}
+
+function toggleAbilitiesEditMode() {
+  state.ui.abilitiesEditMode = !state.ui.abilitiesEditMode;
+  renderAbilities();
 }
 
 function detectDelimiter(firstLine) {
@@ -648,19 +725,20 @@ async function loadAbilitiesCatalog() {
   const csvText = await response.text();
   const parsed = parseCSV(csvText);
 
- state.abilitiesCatalog = parsed
-  .map((row) => ({
-    id: row.ID,
-    categoria: row.Categoria,
-    nome: row.Nome,
-    diff: row.Diff,
-    car: row.Caratteristica,
-    poolBase: toInt(row["Pool Base"], 0),
-    cap: toInt(row.Cap, 0),
-    kit: row.Kit === "TRUE",
-    core: row.Core === "TRUE",
-  }))
-  .filter((row) => row.id && row.nome);
+  state.abilitiesCatalog = parsed
+    .map((row) => ({
+      id: row.ID,
+      categoria: row.Categoria,
+      nome: row.Nome,
+      diff: row.Diff,
+      car: row.Caratteristica,
+      poolBase: toInt(row["Pool Base"], 0),
+      cap: toInt(row.Cap, 0),
+      kit: row.Kit === "TRUE",
+      core: row.Core === "TRUE",
+    }))
+    .filter((row) => row.id && row.nome)
+    .sort((a, b) => a.nome.localeCompare(b.nome, "it"));
 }
 
 function bindEvents() {
@@ -668,6 +746,7 @@ function bindEvents() {
   dom.buttons.save.onclick = updateChar;
   dom.buttons.home.onclick = () => show("home");
   dom.buttons.addAbilityRow.onclick = addAbilityRow;
+  dom.buttons.toggleAbilitiesEdit.onclick = toggleAbilitiesEditMode;
   dom.buttons.duplicateCharacter.onclick = duplicateCharacter;
   dom.buttons.deleteCharacter.onclick = deleteCharacter;
 
@@ -700,15 +779,25 @@ function bindEvents() {
     if (event.target.matches(".ability-name")) {
       handleAbilityChange(event);
     }
-
-    if (event.target.matches(".ability-points")) {
-      handleAbilityPointsChange(event);
-    }
   });
 
-  dom.abilitiesList.addEventListener("input", (event) => {
-    if (event.target.matches(".ability-points")) {
-      handleAbilityPointsChange(event);
+  dom.abilitiesList.addEventListener("click", (event) => {
+    const plusBtn = event.target.closest(".ability-stepper--plus");
+    const minusBtn = event.target.closest(".ability-stepper--minus");
+    const deleteBtn = event.target.closest(".ability-delete");
+
+    if (plusBtn) {
+      changeAbilityPoints(toInt(plusBtn.dataset.rowIndex, 0), +1);
+      return;
+    }
+
+    if (minusBtn) {
+      changeAbilityPoints(toInt(minusBtn.dataset.rowIndex, 0), -1);
+      return;
+    }
+
+    if (deleteBtn) {
+      deleteAbilityRow(toInt(deleteBtn.dataset.rowIndex, 0));
     }
   });
 }
