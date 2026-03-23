@@ -219,64 +219,24 @@
           </div>
         </section>
 
-       <section class="panel">
-  <div class="panel__header">
+      <section class="panel">
+  <div class="panel__header panel__header--abilities">
     <div>
       <h2>Abilità</h2>
-      <p class="panel__subtitle">
-        Nome e Pool sono in primo piano. Il resto resta leggibile ma secondario.
-      </p>
+      <p class="panel__subtitle">Gestione abilità e punti</p>
     </div>
 
-    <button id="addAbilityRowButton" class="btn btn--secondary" type="button">
-      Aggiungi riga
+    <button id="toggleAbilitiesEdit" class="btn btn--secondary">
+      Modifica
     </button>
   </div>
 
-  <div id="abilitiesList" class="abilities-list">
-    <div class="ability-card" data-row-index="0">
-      <div class="field-group ability-card__name">
-        <label>Abilità</label>
-        <select class="ability-name" data-field="abilityId">
-          <option value="">Seleziona abilità</option>
-        </select>
-      </div>
+  <div id="abilitiesList" class="abilities-list"></div>
 
-      <div class="ability-card__pool-wrap">
-        <span class="ability-card__pool-label">Pool</span>
-        <span class="ability-pool ability-card__pool">0d6</span>
-      </div>
-
-      <div class="ability-card__meta">
-        <div class="field-group ability-card__pp">
-          <label>PP</label>
-          <input
-            class="ability-points"
-            data-field="spentPoints"
-            type="number"
-            min="0"
-            max="6"
-            step="1"
-            value="0"
-          />
-        </div>
-
-        <div class="ability-mini-box">
-          <span class="ability-mini-box__label">Diff</span>
-          <span class="ability-diff">—</span>
-        </div>
-
-        <div class="ability-mini-box">
-          <span class="ability-mini-box__label">Car</span>
-          <span class="ability-car">—</span>
-        </div>
-
-        <div class="ability-mini-box">
-          <span class="ability-mini-box__label">Cap</span>
-          <span class="ability-cap">—</span>
-        </div>
-      </div>
-    </div>
+  <div id="abilitiesControls" class="abilities-controls hidden">
+    <button id="addAbilityRowButton" class="btn btn--primary">
+      + Aggiungi abilità
+    </button>
   </div>
 </section>
 
