@@ -13,6 +13,7 @@ const state = {
   ui: {
     abilitiesEditMode: false,
     talentsEditMode: false,
+    currentArea: null, // "player" | "gm" | null
   },
 };
 
@@ -223,9 +224,13 @@ const repo = {
 
 const dom = {
   screens: {
+    role: document.getElementById("screen-role"),
     home: document.getElementById("screen-home"),
+    gm: document.getElementById("screen-gm"),
     editor: document.getElementById("screen-editor"),
   },
+
+  roleCards: document.querySelectorAll(".role-card"),
 
   list: document.getElementById("characterList"),
   empty: document.getElementById("emptyState"),
@@ -292,6 +297,24 @@ function show(screen) {
   if (dom.screens[screen]) {
     dom.screens[screen].classList.add("screen--active");
   }
+}
+
+function openRoleScreen() {
+  state.ui.currentArea = null;
+  show("role");
+}
+
+function openPlayerHome() {
+  state.ui.currentArea = "player";
+  dom.labels.currentRole.textContent = "Giocatore";
+  show("home");
+  renderList();
+}
+
+function openGMHome() {
+  state.ui.currentArea = "gm";
+  dom.labels.currentRole.textContent = "GM";
+  show("gm");
 }
 
 function saveAll() {
@@ -813,7 +836,7 @@ function deleteCharacter() {
     renderEditor();
     show("editor");
   } else {
-    show("home");
+    openPlayerHome();
   }
 }
 
@@ -1123,9 +1146,23 @@ async function loadTalentsCatalog() {
 }
 
 function bindEvents() {
+  dom.roleCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      const role = card.dataset.role;
+
+      if (role === "player") {
+        openPlayerHome();
+      }
+
+      if (role === "gm") {
+        openGMHome();
+      }
+    });
+  });
+
   dom.buttons.newChar.onclick = createChar;
   dom.buttons.save.onclick = updateChar;
-  dom.buttons.home.onclick = () => show("home");
+  dom.buttons.home.onclick = openRoleScreen;
 
   dom.buttons.addAbilityRow.onclick = addAbilityRow;
   dom.buttons.toggleAbilitiesEdit.onclick = toggleAbilitiesEditMode;
@@ -1247,13 +1284,7 @@ async function init() {
   await loadTalentsCatalog();
 
   renderList();
-
-  if (state.activeId) {
-    renderEditor();
-    show("editor");
-  } else {
-    show("home");
-  }
+  show("role");
 }
 
 init().catch((error) => {
