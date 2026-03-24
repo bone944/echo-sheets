@@ -1,8 +1,3 @@
-const STORAGE_KEYS = {
-  characters: "echo.characters",
-  activeCharacterId: "echo.activeCharacterId",
-};
-
 const DEFAULT_PP_MAX = 12;
 
 const state = {
@@ -16,41 +11,6 @@ const state = {
     currentArea: null, // "player" | "gm" | null
   },
 };
-
-function generateId(prefix = "id") {
-  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function safeParseJSON(value, fallback) {
-  if (typeof value !== "string" || value.trim() === "") {
-    return fallback;
-  }
-
-  try {
-    const parsed = JSON.parse(value);
-    return parsed ?? fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function toInt(value, fallback = 0) {
-  const parsed = parseInt(value, 10);
-  return Number.isNaN(parsed) ? fallback : parsed;
-}
-
-function truncateHalf(value) {
-  return Math.trunc(value / 2);
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
 
 function createEmptyCharacter() {
   return {
@@ -195,32 +155,6 @@ function calculateDerived(character) {
     ppSpent: statsCost + abilitiesCost + talentsCost,
   };
 }
-
-const repo = {
-  getAll() {
-    const raw = localStorage.getItem(STORAGE_KEYS.characters);
-    const parsed = safeParseJSON(raw, []);
-    return Array.isArray(parsed) ? parsed : [];
-  },
-
-  saveAll(data) {
-    localStorage.setItem(STORAGE_KEYS.characters, JSON.stringify(data));
-  },
-
-  getActiveId() {
-    const raw = localStorage.getItem(STORAGE_KEYS.activeCharacterId);
-    return typeof raw === "string" && raw.trim() !== "" ? raw : null;
-  },
-
-  setActiveId(id) {
-    if (!id) {
-      localStorage.removeItem(STORAGE_KEYS.activeCharacterId);
-      return;
-    }
-
-    localStorage.setItem(STORAGE_KEYS.activeCharacterId, id);
-  },
-};
 
 const dom = {
   screens: {
@@ -1027,68 +961,6 @@ function deleteTalentRow(rowIndex) {
 function toggleTalentsEditMode() {
   state.ui.talentsEditMode = !state.ui.talentsEditMode;
   renderTalents();
-}
-
-function detectDelimiter(firstLine) {
-  const semicolons = (firstLine.match(/;/g) || []).length;
-  const commas = (firstLine.match(/,/g) || []).length;
-  const tabs = (firstLine.match(/\t/g) || []).length;
-
-  if (semicolons >= commas && semicolons >= tabs) return ";";
-  if (tabs >= commas && tabs >= semicolons) return "\t";
-  return ",";
-}
-
-function parseCSVLine(line, delimiter) {
-  const cells = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    const next = line[i + 1];
-
-    if (char === '"') {
-      if (inQuotes && next === '"') {
-        current += '"';
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-      }
-    } else if (char === delimiter && !inQuotes) {
-      cells.push(current.trim());
-      current = "";
-    } else {
-      current += char;
-    }
-  }
-
-  cells.push(current.trim());
-  return cells;
-}
-
-function parseCSV(csvText) {
-  const lines = csvText
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
-
-  if (lines.length < 2) return [];
-
-  const delimiter = detectDelimiter(lines[0]);
-  const headers = parseCSVLine(lines[0], delimiter);
-  const dataRows = lines.slice(1);
-
-  return dataRows.map((line) => {
-    const values = parseCSVLine(line, delimiter);
-    const record = {};
-
-    headers.forEach((header, index) => {
-      record[header] = values[index] ?? "";
-    });
-
-    return record;
-  });
 }
 
 async function loadAbilitiesCatalog() {
