@@ -22,3 +22,21 @@ function openGMHome() {
   dom.labels.currentRole.textContent = "GM";
   show("gm");
 }
+function switchEditorTab(tabName) {
+  document.querySelectorAll(".editor-tab").forEach((btn) => {
+    btn.classList.toggle("editor-tab--active", btn.dataset.tab === tabName);
+  });
+
+  document.querySelectorAll(".editor-tab-panel").forEach((panel) => {
+    const isActive = panel.id === `tab-${tabName}`;
+    panel.classList.toggle("hidden", !isActive);
+  });
+}
+
+function bindEditorTabs() {
+  document.querySelectorAll(".editor-tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      switchEditorTab(btn.dataset.tab);
+    });
+  });
+}

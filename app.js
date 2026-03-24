@@ -500,6 +500,7 @@ function initState() {
 async function init() {
   initState();
   bindEvents();
+  bindEditorTabs();
 
   dom.labels.currentRole.textContent = "Giocatore";
   dom.labels.storageMode.textContent = "Locale";

@@ -915,3 +915,42 @@ button {
     grid-template-columns: 1fr 1fr;
   }
 }
+/* ===== EDITOR TABS ===== */
+
+.editor-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  overflow-x: auto;
+}
+
+.editor-tab {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.editor-tab:hover {
+  border-color: rgba(124, 156, 255, 0.4);
+  color: var(--text);
+}
+
+.editor-tab--active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.editor-tab-panel {
+  display: block;
+}
+
+.editor-tab-panel.hidden {
+  display: none;
+}
