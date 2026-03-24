@@ -27,14 +27,38 @@
 
       <div class="topbar__actions">
         <button id="goHomeButton" class="btn btn--ghost" type="button">
-          Personaggi
+          Profili
         </button>
       </div>
     </header>
 
     <main class="app-main">
-      <!-- HOME -->
-      <section id="screen-home" class="screen screen--active">
+      <!-- ROLE SELECT -->
+      <section id="screen-role" class="screen screen--active">
+        <div class="role-screen">
+          <div class="role-screen__header">
+            <h1 class="role-screen__logo">ECHO</h1>
+            <p class="role-screen__subtitle">Seleziona profilo</p>
+          </div>
+
+          <div class="role-cards">
+            <button class="role-card" data-role="player" type="button">
+              <div class="role-card__icon">👤</div>
+              <div class="role-card__title">Giocatore</div>
+              <div class="role-card__desc">Gestisci i tuoi personaggi</div>
+            </button>
+
+            <button class="role-card" data-role="gm" type="button">
+              <div class="role-card__icon">👑</div>
+              <div class="role-card__title">Game Master</div>
+              <div class="role-card__desc">Gestisci campagne e giocatori</div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PLAYER HOME -->
+      <section id="screen-home" class="screen">
         <div class="panel">
           <div class="panel__header">
             <div>
@@ -66,6 +90,27 @@
           <div id="emptyState" class="empty-state">
             <h3>Nessun personaggio creato</h3>
             <p>Crea il primo personaggio per iniziare a testare la scheda.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- GM HOME -->
+      <section id="screen-gm" class="screen">
+        <div class="panel">
+          <div class="panel__header panel__header--stacked">
+            <div>
+              <h2>Area GM</h2>
+              <p class="panel__subtitle">
+                Questa parte arriverà più avanti. Per ora è solo un placeholder strutturale.
+              </p>
+            </div>
+          </div>
+
+          <div class="empty-state">
+            <h3>Sezione GM in sviluppo</h3>
+            <p>
+              Qui inserirò campagne, PNG, mostri, accessi ai personaggi condivisi e strumenti di gestione.
+            </p>
           </div>
         </div>
       </section>
@@ -219,46 +264,47 @@
           </div>
         </section>
 
-      <section class="panel">
-  <div class="panel__header panel__header--abilities">
-    <div>
-      <h2>Abilità</h2>
-      <p class="panel__subtitle">Gestione abilità e punti</p>
-    </div>
-
-    <button id="toggleAbilitiesEdit" class="btn btn--secondary">
-      Modifica
-    </button>
-  </div>
-
-  <div id="abilitiesList" class="abilities-list"></div>
-
-  <div id="abilitiesControls" class="abilities-controls hidden">
-    <button id="addAbilityRowButton" class="btn btn--primary">
-      + Aggiungi abilità
-    </button>
-  </div>
-</section>
         <section class="panel">
-  <div class="panel__header panel__header--abilities">
-    <div>
-      <h2>Talenti</h2>
-      <p class="panel__subtitle">Talenti disponibili in base ai prerequisiti del personaggio</p>
-    </div>
+          <div class="panel__header panel__header--abilities">
+            <div>
+              <h2>Abilità</h2>
+              <p class="panel__subtitle">Gestione abilità e punti</p>
+            </div>
 
-    <button id="toggleTalentsEdit" class="btn btn--secondary">
-      Modifica
-    </button>
-  </div>
+            <button id="toggleAbilitiesEdit" class="btn btn--secondary">
+              Modifica
+            </button>
+          </div>
 
-  <div id="talentsList" class="abilities-list"></div>
+          <div id="abilitiesList" class="abilities-list"></div>
 
-  <div id="talentsControls" class="abilities-controls hidden">
-    <button id="addTalentRowButton" class="btn btn--primary">
-      + Aggiungi talento
-    </button>
-  </div>
-</section>
+          <div id="abilitiesControls" class="abilities-controls hidden">
+            <button id="addAbilityRowButton" class="btn btn--primary">
+              + Aggiungi abilità
+            </button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel__header panel__header--abilities">
+            <div>
+              <h2>Talenti</h2>
+              <p class="panel__subtitle">Talenti disponibili in base ai prerequisiti del personaggio</p>
+            </div>
+
+            <button id="toggleTalentsEdit" class="btn btn--secondary">
+              Modifica
+            </button>
+          </div>
+
+          <div id="talentsList" class="abilities-list"></div>
+
+          <div id="talentsControls" class="abilities-controls hidden">
+            <button id="addTalentRowButton" class="btn btn--primary">
+              + Aggiungi talento
+            </button>
+          </div>
+        </section>
 
         <section class="panel">
           <div class="panel__header panel__header--stacked">
