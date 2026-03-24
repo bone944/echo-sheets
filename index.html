@@ -116,56 +116,69 @@
       </section>
 
       <!-- EDITOR -->
-      <section id="screen-editor" class="screen">
-        <div class="editor-header panel">
-          <div class="editor-header__main">
-            <div class="field-group">
-              <label for="characterName">Nome personaggio</label>
-              <input
-                id="characterName"
-                name="characterName"
-                type="text"
-                placeholder="Inserisci un nome"
-                autocomplete="off"
-              />
-            </div>
-
-            <div class="field-grid field-grid--compact">
-              <div class="field-group">
-                <label for="characterType">Tipo profilo</label>
-                <select id="characterType" name="characterType">
-                  <option value="player">Giocatore</option>
-                  <option value="gm">GM</option>
-                </select>
-              </div>
-
-              <div class="field-group">
-                <label for="ppMax">PP Max</label>
-                <input
-                  id="ppMax"
-                  name="ppMax"
-                  type="number"
-                  min="0"
-                  step="1"
-                  value="12"
-                />
-              </div>
-            </div>
+          <section id="screen-editor" class="screen">
+      <div class="editor-header panel">
+        <div class="editor-header__main">
+          <div class="field-group">
+            <label for="characterName">Nome personaggio</label>
+            <input
+              id="characterName"
+              name="characterName"
+              type="text"
+              placeholder="Inserisci un nome"
+              autocomplete="off"
+            />
           </div>
 
-          <div class="editor-header__actions">
-            <button id="saveCharacterButton" class="btn btn--primary" type="button">
-              Salva
-            </button>
-            <button id="duplicateCharacterButton" class="btn btn--secondary" type="button">
-              Duplica
-            </button>
-            <button id="deleteCharacterButton" class="btn btn--danger" type="button">
-              Elimina
-            </button>
+          <div class="field-grid field-grid--compact">
+            <div class="field-group">
+              <label for="characterType">Tipo profilo</label>
+              <select id="characterType" name="characterType">
+                <option value="player">Giocatore</option>
+                <option value="gm">GM</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="ppMax">PP Max</label>
+              <input
+                id="ppMax"
+                name="ppMax"
+                type="number"
+                min="0"
+                step="1"
+                value="12"
+              />
+            </div>
           </div>
         </div>
 
+        <div class="editor-header__actions">
+          <button id="saveCharacterButton" class="btn btn--primary" type="button">
+            Salva
+          </button>
+          <button id="duplicateCharacterButton" class="btn btn--secondary" type="button">
+            Duplica
+          </button>
+          <button id="deleteCharacterButton" class="btn btn--danger" type="button">
+            Elimina
+          </button>
+        </div>
+      </div>
+
+      <nav class="editor-tabs panel">
+        <button class="editor-tab editor-tab--active" data-tab="base" type="button">
+          Base
+        </button>
+        <button class="editor-tab" data-tab="skills" type="button">
+          Abilità & Talenti
+        </button>
+        <button class="editor-tab" data-tab="other" type="button">
+          Altro
+        </button>
+      </nav>
+
+      <div id="tab-base" class="editor-tab-panel editor-tab-panel--active">
         <section class="summary-grid">
           <article class="summary-card">
             <span class="summary-card__label">PP Spesi</span>
@@ -263,7 +276,9 @@
             </div>
           </div>
         </section>
+      </div>
 
+      <div id="tab-skills" class="editor-tab-panel hidden">
         <section class="panel">
           <div class="panel__header panel__header--abilities">
             <div>
@@ -305,7 +320,9 @@
             </button>
           </div>
         </section>
+      </div>
 
+      <div id="tab-other" class="editor-tab-panel hidden">
         <section class="panel">
           <div class="panel__header panel__header--stacked">
             <div>
@@ -320,7 +337,8 @@
             <p id="saveStatusMessage">Nessuna modifica recente.</p>
           </div>
         </section>
-      </section>
+      </div>
+    </section>
     </main>
   </div>
 
