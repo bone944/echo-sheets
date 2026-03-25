@@ -536,23 +536,24 @@ function deleteCharacterFromList(characterId) {
 
 function bindEvents() {
   // Schermata ruolo
-  dom.roleCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      const role = card.dataset.role;
+  const playerRoleButton = document.getElementById("selectPlayerRole");
+  const gmRoleButton = document.getElementById("selectGMRole");
 
-      if (role === "player") {
-        openPlayerHome();
-        setTopbarUserContext();
-        updateFooter();
-      }
-
-      if (role === "gm") {
-        openGMHome();
-        setTopbarUserContext();
-        updateFooter();
-      }
+  if (playerRoleButton) {
+    playerRoleButton.addEventListener("click", () => {
+      openPlayerHome();
+      setTopbarUserContext();
+      updateFooter();
     });
-  });
+  }
+
+  if (gmRoleButton) {
+    gmRoleButton.addEventListener("click", () => {
+      openGMHome();
+      setTopbarUserContext();
+      updateFooter();
+    });
+  }
 
   // Header / nav principale
   if (dom.buttons.home) {
