@@ -473,8 +473,15 @@ function bindEvents() {
       deleteTalentRow(toInt(deleteBtn.dataset.rowIndex, 0));
     }
   });
-document.getElementById("selectPlayerRole").onclick = openPlayerHome;
-document.getElementById("selectGMRole").onclick = openGMHome;
+document.addEventListener("click", (event) => {
+  if (event.target.closest("#selectPlayerRole")) {
+    openPlayerHome();
+  }
+
+  if (event.target.closest("#selectGMRole")) {
+    openGMHome();
+  }
+});
 }
 
 function initState() {
