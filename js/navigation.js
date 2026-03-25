@@ -1,5 +1,8 @@
 function show(screen) {
-  Object.values(dom.screens).forEach((s) => s.classList.remove("screen--active"));
+  Object.values(dom.screens).forEach((s) => {
+    if (s) s.classList.remove("screen--active");
+  });
+
   if (dom.screens[screen]) {
     dom.screens[screen].classList.add("screen--active");
   }
@@ -39,4 +42,11 @@ function bindEditorTabs() {
       switchEditorTab(btn.dataset.tab);
     });
   });
+}
+
+function openPlayerHome() {
+  state.ui.currentArea = "player";
+  dom.labels.currentRole.textContent = "Giocatore";
+  show("player");
+  renderList();
 }

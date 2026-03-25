@@ -16,49 +16,52 @@
 </head>
 <body>
   <div class="app-shell">
-    <header class="topbar">
-      <div class="topbar__brand">
-        <span class="brand-mark">E</span>
-        <div class="brand-copy">
-          <h1>ECHO Sheet</h1>
-          <p>Prototype v0.1</p>
-        </div>
-      </div>
+   <header class="topbar">
+  <div class="topbar__left">
+    <div class="topbar__avatar">
+      <img src="assets/icons/user.svg" id="topbarAvatar" />
+    </div>
 
-      <div class="topbar__actions">
-        <button id="goHomeButton" class="btn btn--ghost" type="button">
-          Profili
-        </button>
-      </div>
-    </header>
+    <div class="topbar__user">
+      <span id="topbarName">username</span>
+    </div>
+  </div>
+
+  <div class="topbar__right">
+    <button class="topbar__menu">•••</button>
+  </div>
+</header>
 
     <main class="app-main">
       <!-- ROLE SELECT -->
       <section id="screen-role" class="screen screen--active">
-        <div class="role-screen">
-          <div class="role-screen__header">
-            <h1 class="role-screen__logo">ECHO</h1>
-            <p class="role-screen__subtitle">Seleziona profilo</p>
-          </div>
+  <div class="role-screen">
 
-          <div class="role-cards">
-            <button class="role-card" data-role="player" type="button">
-              <div class="role-card__icon">👤</div>
-              <div class="role-card__title">Giocatore</div>
-              <div class="role-card__desc">Gestisci i tuoi personaggi</div>
-            </button>
+    <div class="role-logo">
+      <h1>ECHO</h1>
+    </div>
 
-            <button class="role-card" data-role="gm" type="button">
-              <div class="role-card__icon">👑</div>
-              <div class="role-card__title">Game Master</div>
-              <div class="role-card__desc">Gestisci campagne e giocatori</div>
-            </button>
-          </div>
-        </div>
-      </section>
+    <div class="role-card">
+      <button class="role-option" id="selectPlayerRole">
+        <img src="assets/icons/dice.svg" class="role-icon" />
+        <span class="role-pill">PG</span>
+      </button>
+
+      <div class="role-divider"></div>
+
+      <button class="role-option" id="selectGMRole">
+        <img src="assets/icons/crown.svg" class="role-icon" />
+        <span class="role-pill">GM</span>
+      </button>
+    </div>
+
+    <p class="role-subtitle">Seleziona un profilo</p>
+
+  </div>
+</section>
 
       <!-- PLAYER HOME -->
-      <section id="screen-home" class="screen">
+      <section id="screen-player" class="screen">
         <div class="panel">
           <div class="panel__header">
             <div>
