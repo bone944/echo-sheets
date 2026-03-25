@@ -334,36 +334,15 @@ function renderList() {
       el.dataset.id = c.id;
 
       el.innerHTML = `
-  ${
-    state.ui.editMode
-      ? `<div class="character-card__handle" data-id="${c.id}" draggable="true" aria-label="Riordina personaggio" title="Riordina personaggio">≡</div>`
-      : ""
-  }
+        ${
+          state.ui.editMode
+            ? `<div class="character-card__handle" data-id="${c.id}" draggable="true" aria-label="Riordina personaggio" title="Riordina personaggio">≡</div>`
+            : ""
+        }
 
-  <div class="character-card__avatar">
-    <img src="assets/icons/user.svg" alt="Avatar personaggio" />
-  </div>
-
-  ${
-    state.ui.editMode
-      ? `<input class="character-card__name" value="${escapeHtml(c.name)}" data-id="${c.id}" />`
-      : `<span class="character-card__name">${escapeHtml(c.name)}</span>`
-  }
-
-  ${
-    state.ui.editMode
-      ? `
-        <button
-          class="character-delete"
-          data-id="${c.id}"
-          type="button"
-          aria-label="Elimina personaggio"
-          title="Elimina personaggio"
-        >−</button>
-      `
-      : ""
-  }
-`;
+        <div class="character-card__avatar">
+          <img src="assets/icons/user.svg" alt="Avatar personaggio" />
+        </div>
 
         ${
           state.ui.editMode
