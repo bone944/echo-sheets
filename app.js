@@ -10,6 +10,9 @@ const state = {
     talentsEditMode: false,
     currentArea: null, // "player" | "gm" | null
   },
+  ui: {
+  editMode: false
+},
 };
 
 function createEmptyCharacter() {
@@ -236,8 +239,70 @@ function renderList() {
 
   if (!Array.isArray(state.characters) || state.characters.length === 0) {
     dom.empty.classList.remove("hidden");
-    return;
+  } else {
+    dom.empty.classList.add("hidden");
+
+    state.characters.forEach((c) => {
+      const d = calculateDerived(c);
+
+      const el = document.createElement("div");
+      el.className = `character-card ${state.ui.editMode ? "edit" : ""}`;
+
+      el.innerHTML = `
+        <div class="character-card__avatar">
+          <img src="assets/icons/user.svg" />
+        </div>
+
+        ${
+          state.ui.editMode
+            ? `<input class="character-card__name" value="${escapeHtml(c.name)}" data-id="${c.id}" />`
+            : `<span class="character-card__name">${escapeHtml(c.name)}</span>`
+        }
+
+        ${
+          state.ui.editMode
+            ? `<button class="character-delete" data-id="${c.id}">−</button>`
+            : ""
+        }
+      `;
+
+      if (!state.ui.editMode) {
+        el.addEventListener("click", () => {
+          state.activeId = c.id;
+          saveAll();
+          renderEditor();
+          show("editor");
+        });
+      }
+
+      dom.list.appendChild(el);
+    });
   }
+
+  const fab = document.getElementById("addCharacterFloating");
+  if (fab) {
+    if (state.ui.editMode) {
+      fab.classList.remove("hidden");
+    } else {
+      fab.classList.add("hidden");
+    }
+  }
+}
+
+function exitEditMode() {
+  state.ui.editMode = false;
+  renderList();
+  updateFooter();
+}
+
+function updateFooter() {
+  const footer = document.getElementById("playerFooter");
+  const editBtn = document.getElementById("footerEdit");
+
+  footer.classList.remove("hidden");
+
+  editBtn.textContent = state.ui.editMode ? "Salva" : "Modifica";
+}
 
   dom.empty.classList.add("hidden");
 
@@ -382,6 +447,21 @@ function bindEvents() {
         openGMHome();
       }
     });
+    document.getElementById("footerEdit").onclick = () => {
+  if (state.ui.editMode) {
+    saveAll();
+    exitEditMode();
+  } else {
+    enterEditMode();
+  }
+};
+document.getElementById("addCharacterFloating").onclick = () => {
+  const c = createEmptyCharacter();
+  state.characters.push(c);
+  saveAll();
+  renderList();
+};
+document.getElementById("footerBack").onclick = openRoleScreen;
   });
 
   if (dom.buttons.newChar) dom.buttons.newChar.onclick = createChar;

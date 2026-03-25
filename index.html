@@ -62,14 +62,30 @@
 
       <!-- PLAYER HOME -->
       <section id="screen-player" class="screen">
-        <div class="panel">
-          <div class="panel__header">
-            <div>
-              <h2>I tuoi personaggi</h2>
-              <p class="panel__subtitle">
-                In questa fase i dati vengono salvati nel browser, ma la struttura è già pensata per il cloud.
-              </p>
-            </div>
+                    <div class="player-home">
+
+              <h2 class="player-title">Seleziona un personaggio</h2>
+
+              <div id="characterList" class="character-list"></div>
+
+              <button id="addCharacterFloating" class="fab hidden">+</button>
+
+            </div>>
+            <footer id="playerFooter" class="footer hidden">
+
+  <button id="footerBack" class="footer-btn">
+    ‹‹
+  </button>
+
+  <button id="footerEdit" class="footer-btn footer-btn--primary">
+    Modifica
+  </button>
+
+  <button id="footerNext" class="footer-btn disabled">
+    ››
+  </button>
+
+</footer>
 
             <button id="newCharacterButton" class="btn btn--primary" type="button">
               Nuovo personaggio
