@@ -987,7 +987,8 @@ button {
 
 .topbar__avatar img {
   width: 70%;
-  opacity: 0.8;
+  opacity: 0.9;
+  filter: brightness(0) invert(1);
 }
 
 .topbar__user {
@@ -1038,11 +1039,21 @@ button {
   align-items: center;
   gap: 14px;
   cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.role-option:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.role-option:active {
+  transform: scale(0.98);
 }
 
 .role-icon {
   width: 40px;
   filter: brightness(0) invert(1);
+  opacity: 0.9;
 }
 
 .role-pill {

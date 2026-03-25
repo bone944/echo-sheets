@@ -384,18 +384,18 @@ function bindEvents() {
     });
   });
 
-  dom.buttons.newChar.onclick = createChar;
-  dom.buttons.save.onclick = updateChar;
-  dom.buttons.home.onclick = openRoleScreen;
+  if (dom.buttons.newChar) dom.buttons.newChar.onclick = createChar;
+  if (dom.buttons.save) dom.buttons.save.onclick = updateChar;
+  if (dom.buttons.home) dom.buttons.home.onclick = openRoleScreen;
 
-  dom.buttons.addAbilityRow.onclick = addAbilityRow;
-  dom.buttons.toggleAbilitiesEdit.onclick = toggleAbilitiesEditMode;
+  if (dom.buttons.addAbilityRow) dom.buttons.addAbilityRow.onclick = addAbilityRow;
+  if (dom.buttons.toggleAbilitiesEdit) dom.buttons.toggleAbilitiesEdit.onclick = toggleAbilitiesEditMode;
 
-  dom.buttons.addTalentRow.onclick = addTalentRow;
-  dom.buttons.toggleTalentsEdit.onclick = toggleTalentsEditMode;
+  if (dom.buttons.addTalentRow) dom.buttons.addTalentRow.onclick = addTalentRow;
+  if (dom.buttons.toggleTalentsEdit) dom.buttons.toggleTalentsEdit.onclick = toggleTalentsEditMode;
 
-  dom.buttons.duplicateCharacter.onclick = duplicateCharacter;
-  dom.buttons.deleteCharacter.onclick = deleteCharacter;
+  if (dom.buttons.duplicateCharacter) dom.buttons.duplicateCharacter.onclick = duplicateCharacter;
+  if (dom.buttons.deleteCharacter) dom.buttons.deleteCharacter.onclick = deleteCharacter;
 
   dom.list.addEventListener("click", (event) => {
     const button = event.target.closest("[data-action]");
