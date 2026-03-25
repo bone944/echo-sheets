@@ -16,97 +16,61 @@
 </head>
 <body>
   <div class="app-shell">
-   <header class="topbar">
-  <div class="topbar__left">
-    <div class="topbar__avatar">
-      <img src="assets/icons/user.svg" id="topbarAvatar" />
-    </div>
+    <header class="topbar">
+      <div class="topbar__left">
+        <div class="topbar__avatar">
+          <img src="assets/icons/user.svg" id="topbarAvatar" alt="Avatar" />
+        </div>
 
-    <div class="topbar__user">
-      <span id="topbarName">username</span>
-    </div>
-  </div>
+        <div class="topbar__user">
+          <span id="topbarName">username</span>
+        </div>
+      </div>
 
-  <div class="topbar__right">
-    <button class="topbar__menu">•••</button>
-  </div>
-</header>
+      <div class="topbar__right">
+        <button class="topbar__menu" type="button">•••</button>
+      </div>
+    </header>
 
     <main class="app-main">
       <!-- ROLE SELECT -->
       <section id="screen-role" class="screen screen--active">
-  <div class="role-screen">
+        <div class="role-screen">
+          <div class="role-logo">
+            <h1>ECHO</h1>
+          </div>
 
-    <div class="role-logo">
-      <h1>ECHO</h1>
-    </div>
+          <div class="role-card">
+            <button class="role-option" id="selectPlayerRole" type="button">
+              <img src="assets/icons/dice.svg" class="role-icon" alt="Profilo giocatore" />
+              <span class="role-pill">PG</span>
+            </button>
 
-    <div class="role-card">
-      <button class="role-option" id="selectPlayerRole">
-        <img src="assets/icons/dice.svg" class="role-icon" />
-        <span class="role-pill">PG</span>
-      </button>
+            <div class="role-divider"></div>
 
-      <div class="role-divider"></div>
+            <button class="role-option" id="selectGMRole" type="button">
+              <img src="assets/icons/crown.svg" class="role-icon" alt="Profilo GM" />
+              <span class="role-pill">GM</span>
+            </button>
+          </div>
 
-      <button class="role-option" id="selectGMRole">
-        <img src="assets/icons/crown.svg" class="role-icon" />
-        <span class="role-pill">GM</span>
-      </button>
-    </div>
-
-    <p class="role-subtitle">Seleziona un profilo</p>
-
-  </div>
-</section>
+          <p class="role-subtitle">Seleziona un profilo</p>
+        </div>
+      </section>
 
       <!-- PLAYER HOME -->
       <section id="screen-player" class="screen">
-                    <div class="player-home">
-
-              <h2 class="player-title">Seleziona un personaggio</h2>
-
-              <div id="characterList" class="character-list"></div>
-
-              <button id="addCharacterFloating" class="fab hidden">+</button>
-
-            </div>>
-            <footer id="playerFooter" class="footer hidden">
-
-  <button id="footerBack" class="footer-btn">
-    ‹‹
-  </button>
-
-  <button id="footerEdit" class="footer-btn footer-btn--primary">
-    Modifica
-  </button>
-
-  <button id="footerNext" class="footer-btn disabled">
-    ››
-  </button>
-
-</footer>
-
-          </div>
-
-          <div class="meta-row">
-            <div class="meta-card">
-              <span class="meta-card__label">Ruolo</span>
-              <span id="currentRoleLabel" class="meta-card__value">Giocatore</span>
-            </div>
-
-            <div class="meta-card">
-              <span class="meta-card__label">Salvataggio</span>
-              <span id="storageModeLabel" class="meta-card__value">Locale</span>
-            </div>
-          </div>
+        <div class="player-home">
+          <h2 class="player-title">Seleziona un personaggio</h2>
 
           <div id="characterList" class="character-list"></div>
 
-          <div id="emptyState" class="empty-state">
+          <div id="emptyState" class="empty-state hidden">
             <h3>Nessun personaggio creato</h3>
-            <p>Crea il primo personaggio per iniziare a testare la scheda.</p>
+            <p>Crea il primo personaggio per iniziare.</p>
           </div>
+
+          <button id="addCharacterFloating" class="fab hidden" type="button">+</button>
         </div>
       </section>
 
@@ -132,230 +96,244 @@
       </section>
 
       <!-- EDITOR -->
-          <section id="screen-editor" class="screen">
-      <div class="editor-header panel">
-        <div class="editor-header__main">
-          <div class="field-group">
-            <label for="characterName">Nome personaggio</label>
-            <input
-              id="characterName"
-              name="characterName"
-              type="text"
-              placeholder="Inserisci un nome"
-              autocomplete="off"
-            />
-          </div>
-
-          <div class="field-grid field-grid--compact">
+      <section id="screen-editor" class="screen">
+        <div class="editor-header panel">
+          <div class="editor-header__main">
             <div class="field-group">
-              <label for="characterType">Tipo profilo</label>
-              <select id="characterType" name="characterType">
-                <option value="player">Giocatore</option>
-                <option value="gm">GM</option>
-              </select>
-            </div>
-
-            <div class="field-group">
-              <label for="ppMax">PP Max</label>
+              <label for="characterName">Nome personaggio</label>
               <input
-                id="ppMax"
-                name="ppMax"
-                type="number"
-                min="0"
-                step="1"
-                value="12"
+                id="characterName"
+                name="characterName"
+                type="text"
+                placeholder="Inserisci un nome"
+                autocomplete="off"
               />
             </div>
+
+            <div class="field-grid field-grid--compact">
+              <div class="field-group">
+                <label for="characterType">Tipo profilo</label>
+                <select id="characterType" name="characterType">
+                  <option value="player">Giocatore</option>
+                  <option value="gm">GM</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="ppMax">PP Max</label>
+                <input
+                  id="ppMax"
+                  name="ppMax"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value="12"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="editor-header__actions">
+            <button id="saveCharacterButton" class="btn btn--primary" type="button">
+              Salva
+            </button>
+            <button id="duplicateCharacterButton" class="btn btn--secondary" type="button">
+              Duplica
+            </button>
+            <button id="deleteCharacterButton" class="btn btn--danger" type="button">
+              Elimina
+            </button>
           </div>
         </div>
 
-        <div class="editor-header__actions">
-          <button id="saveCharacterButton" class="btn btn--primary" type="button">
-            Salva
+        <nav class="editor-tabs panel">
+          <button class="editor-tab editor-tab--active" data-tab="base" type="button">
+            Base
           </button>
-          <button id="duplicateCharacterButton" class="btn btn--secondary" type="button">
-            Duplica
+          <button class="editor-tab" data-tab="skills" type="button">
+            Abilità & Talenti
           </button>
-          <button id="deleteCharacterButton" class="btn btn--danger" type="button">
-            Elimina
+          <button class="editor-tab" data-tab="other" type="button">
+            Altro
           </button>
+        </nav>
+
+        <div id="tab-base" class="editor-tab-panel editor-tab-panel--active">
+          <section class="summary-grid">
+            <article class="summary-card">
+              <span class="summary-card__label">PP Spesi</span>
+              <span id="ppSpent" class="summary-card__value">0</span>
+            </article>
+
+            <article class="summary-card">
+              <span class="summary-card__label">PP Max</span>
+              <span id="ppMaxDisplay" class="summary-card__value">12</span>
+            </article>
+
+            <article class="summary-card">
+              <span class="summary-card__label">Tempra</span>
+              <span id="tempra" class="summary-card__value">0</span>
+            </article>
+
+            <article class="summary-card">
+              <span class="summary-card__label">Evasione</span>
+              <span id="evasione" class="summary-card__value">0</span>
+            </article>
+
+            <article class="summary-card">
+              <span class="summary-card__label">Mente</span>
+              <span id="mente" class="summary-card__value">0</span>
+            </article>
+
+            <article class="summary-card">
+              <span class="summary-card__label">Risolutezza</span>
+              <span id="risolutezza" class="summary-card__value">0</span>
+            </article>
+          </section>
+
+          <section class="panel">
+            <div class="panel__header panel__header--stacked">
+              <div>
+                <h2>Caratteristiche</h2>
+                <p class="panel__subtitle">
+                  Base del personaggio. Da qui derivano difese e costo PP.
+                </p>
+              </div>
+            </div>
+
+            <div class="field-grid">
+              <div class="field-group">
+                <label for="vigore">Vigore</label>
+                <input id="vigore" name="vigore" type="number" min="-5" max="5" step="1" value="0" />
+              </div>
+
+              <div class="field-group">
+                <label for="agilita">Agilità</label>
+                <input id="agilita" name="agilita" type="number" min="-5" max="5" step="1" value="0" />
+              </div>
+
+              <div class="field-group">
+                <label for="ingegno">Ingegno</label>
+                <input id="ingegno" name="ingegno" type="number" min="-5" max="5" step="1" value="0" />
+              </div>
+
+              <div class="field-group">
+                <label for="spirito">Spirito</label>
+                <input id="spirito" name="spirito" type="number" min="-5" max="5" step="1" value="0" />
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel__header panel__header--stacked">
+              <div>
+                <h2>Difese derivate</h2>
+                <p class="panel__subtitle">
+                  Questi valori sono automatici e vengono ricalcolati in base alle caratteristiche.
+                </p>
+              </div>
+            </div>
+
+            <div class="output-grid">
+              <div class="output-box">
+                <span class="output-box__label">Tempra</span>
+                <span id="tempraLarge" class="output-box__value">0</span>
+              </div>
+
+              <div class="output-box">
+                <span class="output-box__label">Evasione</span>
+                <span id="evasioneLarge" class="output-box__value">0</span>
+              </div>
+
+              <div class="output-box">
+                <span class="output-box__label">Mente</span>
+                <span id="menteLarge" class="output-box__value">0</span>
+              </div>
+
+              <div class="output-box">
+                <span class="output-box__label">Risolutezza</span>
+                <span id="risolutezzaLarge" class="output-box__value">0</span>
+              </div>
+            </div>
+          </section>
         </div>
-      </div>
 
-      <nav class="editor-tabs panel">
-        <button class="editor-tab editor-tab--active" data-tab="base" type="button">
-          Base
-        </button>
-        <button class="editor-tab" data-tab="skills" type="button">
-          Abilità & Talenti
-        </button>
-        <button class="editor-tab" data-tab="other" type="button">
-          Altro
-        </button>
-      </nav>
+        <div id="tab-skills" class="editor-tab-panel hidden">
+          <section class="panel">
+            <div class="panel__header panel__header--abilities">
+              <div>
+                <h2>Abilità</h2>
+                <p class="panel__subtitle">Gestione abilità e punti</p>
+              </div>
 
-      <div id="tab-base" class="editor-tab-panel editor-tab-panel--active">
-        <section class="summary-grid">
-          <article class="summary-card">
-            <span class="summary-card__label">PP Spesi</span>
-            <span id="ppSpent" class="summary-card__value">0</span>
-          </article>
-
-          <article class="summary-card">
-            <span class="summary-card__label">PP Max</span>
-            <span id="ppMaxDisplay" class="summary-card__value">12</span>
-          </article>
-
-          <article class="summary-card">
-            <span class="summary-card__label">Tempra</span>
-            <span id="tempra" class="summary-card__value">0</span>
-          </article>
-
-          <article class="summary-card">
-            <span class="summary-card__label">Evasione</span>
-            <span id="evasione" class="summary-card__value">0</span>
-          </article>
-
-          <article class="summary-card">
-            <span class="summary-card__label">Mente</span>
-            <span id="mente" class="summary-card__value">0</span>
-          </article>
-
-          <article class="summary-card">
-            <span class="summary-card__label">Risolutezza</span>
-            <span id="risolutezza" class="summary-card__value">0</span>
-          </article>
-        </section>
-
-        <section class="panel">
-          <div class="panel__header panel__header--stacked">
-            <div>
-              <h2>Caratteristiche</h2>
-              <p class="panel__subtitle">
-                Base del personaggio. Da qui derivano difese e costo PP.
-              </p>
-            </div>
-          </div>
-
-          <div class="field-grid">
-            <div class="field-group">
-              <label for="vigore">Vigore</label>
-              <input id="vigore" name="vigore" type="number" min="-5" max="5" step="1" value="0" />
+              <button id="toggleAbilitiesEdit" class="btn btn--secondary" type="button">
+                Modifica
+              </button>
             </div>
 
-            <div class="field-group">
-              <label for="agilita">Agilità</label>
-              <input id="agilita" name="agilita" type="number" min="-5" max="5" step="1" value="0" />
+            <div id="abilitiesList" class="abilities-list"></div>
+
+            <div id="abilitiesControls" class="abilities-controls hidden">
+              <button id="addAbilityRowButton" class="btn btn--primary" type="button">
+                + Aggiungi abilità
+              </button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel__header panel__header--abilities">
+              <div>
+                <h2>Talenti</h2>
+                <p class="panel__subtitle">Talenti disponibili in base ai prerequisiti del personaggio</p>
+              </div>
+
+              <button id="toggleTalentsEdit" class="btn btn--secondary" type="button">
+                Modifica
+              </button>
             </div>
 
-            <div class="field-group">
-              <label for="ingegno">Ingegno</label>
-              <input id="ingegno" name="ingegno" type="number" min="-5" max="5" step="1" value="0" />
+            <div id="talentsList" class="abilities-list"></div>
+
+            <div id="talentsControls" class="abilities-controls hidden">
+              <button id="addTalentRowButton" class="btn btn--primary" type="button">
+                + Aggiungi talento
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <div id="tab-other" class="editor-tab-panel hidden">
+          <section class="panel">
+            <div class="panel__header panel__header--stacked">
+              <div>
+                <h2>Stato salvataggio</h2>
+                <p class="panel__subtitle">
+                  Per ora salviamo in locale, ma questa area verrà poi collegata al cloud.
+                </p>
+              </div>
             </div>
 
-            <div class="field-group">
-              <label for="spirito">Spirito</label>
-              <input id="spirito" name="spirito" type="number" min="-5" max="5" step="1" value="0" />
+            <div class="status-box">
+              <p id="saveStatusMessage">Nessuna modifica recente.</p>
             </div>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel__header panel__header--stacked">
-            <div>
-              <h2>Difese derivate</h2>
-              <p class="panel__subtitle">
-                Questi valori sono automatici e vengono ricalcolati in base alle caratteristiche.
-              </p>
-            </div>
-          </div>
-
-          <div class="output-grid">
-            <div class="output-box">
-              <span class="output-box__label">Tempra</span>
-              <span id="tempraLarge" class="output-box__value">0</span>
-            </div>
-
-            <div class="output-box">
-              <span class="output-box__label">Evasione</span>
-              <span id="evasioneLarge" class="output-box__value">0</span>
-            </div>
-
-            <div class="output-box">
-              <span class="output-box__label">Mente</span>
-              <span id="menteLarge" class="output-box__value">0</span>
-            </div>
-
-            <div class="output-box">
-              <span class="output-box__label">Risolutezza</span>
-              <span id="risolutezzaLarge" class="output-box__value">0</span>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div id="tab-skills" class="editor-tab-panel hidden">
-        <section class="panel">
-          <div class="panel__header panel__header--abilities">
-            <div>
-              <h2>Abilità</h2>
-              <p class="panel__subtitle">Gestione abilità e punti</p>
-            </div>
-
-            <button id="toggleAbilitiesEdit" class="btn btn--secondary">
-              Modifica
-            </button>
-          </div>
-
-          <div id="abilitiesList" class="abilities-list"></div>
-
-          <div id="abilitiesControls" class="abilities-controls hidden">
-            <button id="addAbilityRowButton" class="btn btn--primary">
-              + Aggiungi abilità
-            </button>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel__header panel__header--abilities">
-            <div>
-              <h2>Talenti</h2>
-              <p class="panel__subtitle">Talenti disponibili in base ai prerequisiti del personaggio</p>
-            </div>
-
-            <button id="toggleTalentsEdit" class="btn btn--secondary">
-              Modifica
-            </button>
-          </div>
-
-          <div id="talentsList" class="abilities-list"></div>
-
-          <div id="talentsControls" class="abilities-controls hidden">
-            <button id="addTalentRowButton" class="btn btn--primary">
-              + Aggiungi talento
-            </button>
-          </div>
-        </section>
-      </div>
-
-      <div id="tab-other" class="editor-tab-panel hidden">
-        <section class="panel">
-          <div class="panel__header panel__header--stacked">
-            <div>
-              <h2>Stato salvataggio</h2>
-              <p class="panel__subtitle">
-                Per ora salviamo in locale, ma questa area verrà poi collegata al cloud.
-              </p>
-            </div>
-          </div>
-
-          <div class="status-box">
-            <p id="saveStatusMessage">Nessuna modifica recente.</p>
-          </div>
-        </section>
-      </div>
-    </section>
+          </section>
+        </div>
+      </section>
     </main>
+
+    <footer id="playerFooter" class="footer hidden">
+      <button id="footerBack" class="footer-btn" type="button">
+        ‹‹
+      </button>
+
+      <button id="footerEdit" class="footer-btn footer-btn--primary" type="button">
+        Modifica
+      </button>
+
+      <button id="footerNext" class="footer-btn disabled" type="button">
+        ››
+      </button>
+    </footer>
   </div>
 
   <script src="js/utils.js"></script>
