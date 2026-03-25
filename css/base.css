@@ -1118,6 +1118,17 @@ button {
 
 .character-card__name {
   font-size: 16px;
+  flex: 1;
+  min-width: 0;
+}
+.character-card input.character-card__name {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font: inherit;
+  padding: 0;
+  margin: 0;
 }
 
 /* EDIT MODE */
