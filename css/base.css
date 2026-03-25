@@ -1075,13 +1075,13 @@ button {
 /* ===== PLAYER HOME ===== */
 
 .player-home {
-  padding: 20px;
+  padding: 16px;
 }
 
 .player-title {
-  margin-bottom: 16px;
-  font-size: 18px;
-  font-weight: 500;
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .character-list {
@@ -1093,12 +1093,14 @@ button {
 .character-card {
   background: #1c1c24;
   border-radius: 14px;
-  padding: 12px;
+  padding: 10px 12px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   border: 1px solid rgba(255,255,255,0.06);
   transition: transform 0.15s ease, opacity 0.15s ease, border-color 0.15s ease;
+  min-height: 62px;
 }
 
 .character-card.is-dragging {
@@ -1107,8 +1109,9 @@ button {
 }
 
 .character-card__avatar {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
   border-radius: 50%;
   background: #2a2a34;
   display: flex;
@@ -1144,9 +1147,14 @@ button {
 }
 
 .character-card__name {
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .character-card input.character-card__name {
   background: transparent;
@@ -1161,26 +1169,31 @@ button {
 /* EDIT MODE */
 
 .character-card.edit {
-  transform: translateX(12px);
+  transform: none;
 }
 
 .character-delete {
-  margin-left: auto;
-  width: 28px;
-  height: 28px;
+  margin-left: 4px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: #ff4d4d;
   color: white;
   border: none;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  line-height: 1;
 }
 
 /* FAB */
 
 .fab {
   position: fixed;
-  right: 20px;
-  bottom: 90px;
+  right: 16px;
+  bottom: 84px;
   width: 52px;
   height: 52px;
   border-radius: 50%;
@@ -1203,7 +1216,8 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  z-index: 40;
 }
 
 .footer-btn {
@@ -1211,6 +1225,8 @@ button {
   border: none;
   color: rgba(255,255,255,0.6);
   font-size: 20px;
+  min-height: 42px;
+  min-width: 42px;
 }
 
 .footer-btn--primary {
@@ -1218,6 +1234,8 @@ button {
   color: white;
   padding: 8px 20px;
   border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .footer-btn.disabled {

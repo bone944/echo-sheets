@@ -359,7 +359,7 @@ function renderList() {
                 type="button"
                 aria-label="Elimina personaggio"
                 title="Elimina personaggio"
-              >−</button>
+              >-</button>
             `
             : ""
         }
