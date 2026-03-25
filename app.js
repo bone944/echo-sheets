@@ -6,11 +6,12 @@ const state = {
   abilitiesCatalog: [],
   talentsCatalog: [],
   ui: {
-    abilitiesEditMode: false,
-    talentsEditMode: false,
-    currentArea: null, // "player" | "gm" | null
-    editMode: false,   // edit mode della Home Giocatore
-  },
+  abilitiesEditMode: false,
+  talentsEditMode: false,
+  currentArea: null, // "player" | "gm" | null
+  editMode: false,   // edit mode della Home Giocatore
+  dragCharacterId: null,
+},
 };
 
 const dom = {
@@ -329,13 +330,40 @@ function renderList() {
 
     state.characters.forEach((c) => {
       const el = document.createElement("div");
-      el.className = `character-card ${state.ui.editMode ? "edit" : ""}`;
+      el.className = `character-card ${state.ui.editMode ? "edit" : ""} ${state.ui.dragCharacterId === c.id ? "is-dragging" : ""}`;
       el.dataset.id = c.id;
 
       el.innerHTML = `
-        <div class="character-card__avatar">
-          <img src="assets/icons/user.svg" alt="Avatar personaggio" />
-        </div>
+  ${
+    state.ui.editMode
+      ? `<div class="character-card__handle" data-id="${c.id}" draggable="true" aria-label="Riordina personaggio" title="Riordina personaggio">≡</div>`
+      : ""
+  }
+
+  <div class="character-card__avatar">
+    <img src="assets/icons/user.svg" alt="Avatar personaggio" />
+  </div>
+
+  ${
+    state.ui.editMode
+      ? `<input class="character-card__name" value="${escapeHtml(c.name)}" data-id="${c.id}" />`
+      : `<span class="character-card__name">${escapeHtml(c.name)}</span>`
+  }
+
+  ${
+    state.ui.editMode
+      ? `
+        <button
+          class="character-delete"
+          data-id="${c.id}"
+          type="button"
+          aria-label="Elimina personaggio"
+          title="Elimina personaggio"
+        >−</button>
+      `
+      : ""
+  }
+`;
 
         ${
           state.ui.editMode
@@ -534,6 +562,38 @@ function deleteCharacterFromList(characterId) {
   renderList();
 }
 
+function reorderCharacters(draggedId, targetId) {
+  if (!draggedId || !targetId || draggedId === targetId) return;
+
+  const fromIndex = state.characters.findIndex((c) => c.id === draggedId);
+  const toIndex = state.characters.findIndex((c) => c.id === targetId);
+
+  if (fromIndex === -1 || toIndex === -1) return;
+
+  const [moved] = state.characters.splice(fromIndex, 1);
+  state.characters.splice(toIndex, 0, moved);
+}
+
+function handleCharacterDragStart(characterId) {
+  if (!state.ui.editMode) return;
+  state.ui.dragCharacterId = characterId;
+  renderList();
+}
+
+function handleCharacterDragEnter(targetId) {
+  if (!state.ui.editMode) return;
+  if (!state.ui.dragCharacterId) return;
+  if (state.ui.dragCharacterId === targetId) return;
+
+  reorderCharacters(state.ui.dragCharacterId, targetId);
+  renderList();
+}
+
+function handleCharacterDragEnd() {
+  state.ui.dragCharacterId = null;
+  renderList();
+}
+
 function bindEvents() {
   // Schermata ruolo
   const playerRoleButton = document.getElementById("selectPlayerRole");
@@ -606,22 +666,57 @@ function bindEvents() {
 
   // Lista personaggi: delete in edit mode
   if (dom.list) {
-    dom.list.addEventListener("click", (event) => {
-      const deleteBtn = event.target.closest(".character-delete");
-      if (deleteBtn) {
-        const characterId = deleteBtn.dataset.id;
-        deleteCharacterFromList(characterId);
-      }
-    });
+  dom.list.addEventListener("click", (event) => {
+    const deleteBtn = event.target.closest(".character-delete");
+    if (deleteBtn) {
+      const characterId = deleteBtn.dataset.id;
+      deleteCharacterFromList(characterId);
+    }
+  });
 
-    // Rename inline live nello state? No: salviamo solo con "Salva"
-    dom.list.addEventListener("input", (event) => {
-      const input = event.target.closest(".character-card__name[data-id]");
-      if (!input) return;
+  dom.list.addEventListener("input", (event) => {
+    const input = event.target.closest(".character-card__name[data-id]");
+    if (!input) return;
+  });
 
-      // Nessun salvataggio immediato: lasciamo il commit al bottone Salva
-    });
-  }
+  dom.list.addEventListener("dragstart", (event) => {
+    const handle = event.target.closest(".character-card__handle[data-id]");
+    if (!handle) {
+      event.preventDefault();
+      return;
+    }
+
+    const characterId = handle.dataset.id;
+    handleCharacterDragStart(characterId);
+
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", characterId);
+    }
+  });
+
+  dom.list.addEventListener("dragover", (event) => {
+    if (!state.ui.editMode) return;
+    event.preventDefault();
+  });
+
+  dom.list.addEventListener("dragenter", (event) => {
+    const card = event.target.closest(".character-card[data-id]");
+    if (!card) return;
+
+    const targetId = card.dataset.id;
+    handleCharacterDragEnter(targetId);
+  });
+
+  dom.list.addEventListener("dragend", () => {
+    handleCharacterDragEnd();
+  });
+
+  dom.list.addEventListener("drop", (event) => {
+    event.preventDefault();
+    handleCharacterDragEnd();
+  });
+}
 
   // Form editor base
   [
