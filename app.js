@@ -9,10 +9,90 @@ const state = {
     abilitiesEditMode: false,
     talentsEditMode: false,
     currentArea: null, // "player" | "gm" | null
+    editMode: false,   // edit mode della Home Giocatore
   },
-  ui: {
-  editMode: false
-},
+};
+
+const dom = {
+  screens: {
+    role: document.getElementById("screen-role"),
+    player: document.getElementById("screen-player"),
+    gm: document.getElementById("screen-gm"),
+    editor: document.getElementById("screen-editor"),
+  },
+
+  roleCards: document.querySelectorAll(".role-card"),
+
+  list: document.getElementById("characterList"),
+  empty: document.getElementById("emptyState"),
+
+  footer: {
+    root: document.getElementById("playerFooter"),
+    back: document.getElementById("footerBack"),
+    edit: document.getElementById("footerEdit"),
+    next: document.getElementById("footerNext"),
+  },
+
+  floating: {
+    addCharacter: document.getElementById("addCharacterFloating"),
+  },
+
+  topbar: {
+    name: document.getElementById("topbarName"),
+    avatar: document.getElementById("topbarAvatar"),
+  },
+
+  buttons: {
+    newChar: document.getElementById("newCharacterButton"),
+    save: document.getElementById("saveCharacterButton"),
+    home: document.getElementById("goHomeButton"),
+
+    addAbilityRow: document.getElementById("addAbilityRowButton"),
+    toggleAbilitiesEdit: document.getElementById("toggleAbilitiesEdit"),
+
+    addTalentRow: document.getElementById("addTalentRowButton"),
+    toggleTalentsEdit: document.getElementById("toggleTalentsEdit"),
+
+    duplicateCharacter: document.getElementById("duplicateCharacterButton"),
+    deleteCharacter: document.getElementById("deleteCharacterButton"),
+  },
+
+  labels: {
+    currentRole: document.getElementById("currentRoleLabel"),
+    storageMode: document.getElementById("storageModeLabel"),
+    saveStatus: document.getElementById("saveStatusMessage"),
+  },
+
+  editor: {
+    name: document.getElementById("characterName"),
+    type: document.getElementById("characterType"),
+    ppMax: document.getElementById("ppMax"),
+
+    vigore: document.getElementById("vigore"),
+    agilita: document.getElementById("agilita"),
+    ingegno: document.getElementById("ingegno"),
+    spirito: document.getElementById("spirito"),
+  },
+
+  output: {
+    tempra: document.getElementById("tempra"),
+    evasione: document.getElementById("evasione"),
+    mente: document.getElementById("mente"),
+    risolutezza: document.getElementById("risolutezza"),
+    ppSpent: document.getElementById("ppSpent"),
+    ppMax: document.getElementById("ppMaxDisplay"),
+
+    tempraLarge: document.getElementById("tempraLarge"),
+    evasioneLarge: document.getElementById("evasioneLarge"),
+    menteLarge: document.getElementById("menteLarge"),
+    risolutezzaLarge: document.getElementById("risolutezzaLarge"),
+  },
+
+  abilitiesList: document.getElementById("abilitiesList"),
+  abilitiesControls: document.getElementById("abilitiesControls"),
+
+  talentsList: document.getElementById("talentsList"),
+  talentsControls: document.getElementById("talentsControls"),
 };
 
 function createEmptyCharacter() {
@@ -159,72 +239,6 @@ function calculateDerived(character) {
   };
 }
 
-const dom = {
-  screens: {
-    role: document.getElementById("screen-role"),
-    home: document.getElementById("screen-home"),
-    gm: document.getElementById("screen-gm"),
-    editor: document.getElementById("screen-editor"),
-  },
-
-  roleCards: document.querySelectorAll(".role-card"),
-
-  list: document.getElementById("characterList"),
-  empty: document.getElementById("emptyState"),
-
-  buttons: {
-    newChar: document.getElementById("newCharacterButton"),
-    save: document.getElementById("saveCharacterButton"),
-    home: document.getElementById("goHomeButton"),
-
-    addAbilityRow: document.getElementById("addAbilityRowButton"),
-    toggleAbilitiesEdit: document.getElementById("toggleAbilitiesEdit"),
-
-    addTalentRow: document.getElementById("addTalentRowButton"),
-    toggleTalentsEdit: document.getElementById("toggleTalentsEdit"),
-
-    duplicateCharacter: document.getElementById("duplicateCharacterButton"),
-    deleteCharacter: document.getElementById("deleteCharacterButton"),
-  },
-
-  labels: {
-    currentRole: document.getElementById("currentRoleLabel"),
-    storageMode: document.getElementById("storageModeLabel"),
-    saveStatus: document.getElementById("saveStatusMessage"),
-  },
-
-  editor: {
-    name: document.getElementById("characterName"),
-    type: document.getElementById("characterType"),
-    ppMax: document.getElementById("ppMax"),
-
-    vigore: document.getElementById("vigore"),
-    agilita: document.getElementById("agilita"),
-    ingegno: document.getElementById("ingegno"),
-    spirito: document.getElementById("spirito"),
-  },
-
-  output: {
-    tempra: document.getElementById("tempra"),
-    evasione: document.getElementById("evasione"),
-    mente: document.getElementById("mente"),
-    risolutezza: document.getElementById("risolutezza"),
-    ppSpent: document.getElementById("ppSpent"),
-    ppMax: document.getElementById("ppMaxDisplay"),
-
-    tempraLarge: document.getElementById("tempraLarge"),
-    evasioneLarge: document.getElementById("evasioneLarge"),
-    menteLarge: document.getElementById("menteLarge"),
-    risolutezzaLarge: document.getElementById("risolutezzaLarge"),
-  },
-
-  abilitiesList: document.getElementById("abilitiesList"),
-  abilitiesControls: document.getElementById("abilitiesControls"),
-
-  talentsList: document.getElementById("talentsList"),
-  talentsControls: document.getElementById("talentsControls"),
-};
-
 function getActiveChar() {
   return state.characters.find((c) => c.id === state.activeId) || null;
 }
@@ -234,23 +248,93 @@ function saveAll() {
   repo.setActiveId(state.activeId);
 }
 
+function setTopbarUserContext() {
+  if (dom.topbar.name) {
+    dom.topbar.name.textContent = "username";
+  }
+
+  if (dom.topbar.avatar) {
+    dom.topbar.avatar.src = "assets/icons/user.svg";
+    dom.topbar.avatar.alt = "Utente";
+  }
+}
+
+function setTopbarCharacterContext(character) {
+  if (!character) return;
+
+  if (dom.topbar.name) {
+    dom.topbar.name.textContent = character.name || "Personaggio";
+  }
+
+  if (dom.topbar.avatar) {
+    dom.topbar.avatar.src = "assets/icons/user.svg";
+    dom.topbar.avatar.alt = character.name || "Personaggio";
+  }
+}
+
+function enterEditMode() {
+  state.ui.editMode = true;
+  renderList();
+  updateFooter();
+}
+
+function exitEditMode() {
+  state.ui.editMode = false;
+  renderList();
+  updateFooter();
+}
+
+function persistCharacterListEdits() {
+  const inputs = document.querySelectorAll(".character-card__name[data-id]");
+
+  inputs.forEach((input) => {
+    const id = input.dataset.id;
+    const character = state.characters.find((c) => c.id === id);
+    if (!character) return;
+
+    const nextName = input.value.trim();
+    character.name = nextName || "Nuovo personaggio";
+    character.meta.updatedAt = new Date().toISOString();
+  });
+
+  saveAll();
+}
+
+function updateFooter() {
+  if (!dom.footer.root) return;
+
+  const shouldShowFooter = state.ui.currentArea === "player";
+  dom.footer.root.classList.toggle("hidden", !shouldShowFooter);
+
+  if (!shouldShowFooter) return;
+
+  if (dom.footer.edit) {
+    dom.footer.edit.textContent = state.ui.editMode ? "Salva" : "Modifica";
+  }
+
+  if (dom.footer.next) {
+    dom.footer.next.classList.add("disabled");
+  }
+}
+
 function renderList() {
+  if (!dom.list) return;
+
   dom.list.innerHTML = "";
 
   if (!Array.isArray(state.characters) || state.characters.length === 0) {
-    dom.empty.classList.remove("hidden");
+    if (dom.empty) dom.empty.classList.remove("hidden");
   } else {
-    dom.empty.classList.add("hidden");
+    if (dom.empty) dom.empty.classList.add("hidden");
 
     state.characters.forEach((c) => {
-      const d = calculateDerived(c);
-
       const el = document.createElement("div");
       el.className = `character-card ${state.ui.editMode ? "edit" : ""}`;
+      el.dataset.id = c.id;
 
       el.innerHTML = `
         <div class="character-card__avatar">
-          <img src="assets/icons/user.svg" />
+          <img src="assets/icons/user.svg" alt="Avatar personaggio" />
         </div>
 
         ${
@@ -261,7 +345,15 @@ function renderList() {
 
         ${
           state.ui.editMode
-            ? `<button class="character-delete" data-id="${c.id}">−</button>`
+            ? `
+              <button
+                class="character-delete"
+                data-id="${c.id}"
+                type="button"
+                aria-label="Elimina personaggio"
+                title="Elimina personaggio"
+              >−</button>
+            `
             : ""
         }
       `;
@@ -271,7 +363,9 @@ function renderList() {
           state.activeId = c.id;
           saveAll();
           renderEditor();
+          setTopbarCharacterContext(c);
           show("editor");
+          updateFooter();
         });
       }
 
@@ -279,51 +373,11 @@ function renderList() {
     });
   }
 
-  const fab = document.getElementById("addCharacterFloating");
-  if (fab) {
-    if (state.ui.editMode) {
-      fab.classList.remove("hidden");
-    } else {
-      fab.classList.add("hidden");
-    }
+  if (dom.floating.addCharacter) {
+    dom.floating.addCharacter.classList.toggle("hidden", !state.ui.editMode);
   }
-}
 
-function exitEditMode() {
-  state.ui.editMode = false;
-  renderList();
   updateFooter();
-}
-
-function updateFooter() {
-  const footer = document.getElementById("playerFooter");
-  const editBtn = document.getElementById("footerEdit");
-
-  footer.classList.remove("hidden");
-
-  editBtn.textContent = state.ui.editMode ? "Salva" : "Modifica";
-}
-
-  dom.empty.classList.add("hidden");
-
-  state.characters.forEach((c) => {
-    const d = calculateDerived(c);
-
-    const el = document.createElement("div");
-    el.className = "character-card";
-
-    el.innerHTML = `
-      <div>
-        <strong>${escapeHtml(c.name)}</strong><br>
-        <small>${escapeHtml(c.profileType)} · PP ${d.ppSpent}/${c.ppMax}</small>
-      </div>
-      <div class="character-card__actions">
-        <button class="btn btn--primary" data-id="${escapeHtml(c.id)}" data-action="open">Apri</button>
-      </div>
-    `;
-
-    dom.list.appendChild(el);
-  });
 }
 
 function renderEditor() {
@@ -332,51 +386,55 @@ function renderEditor() {
 
   const d = calculateDerived(c);
 
-  dom.editor.name.value = c.name;
-  dom.editor.type.value = c.profileType;
-  dom.editor.ppMax.value = c.ppMax;
+  if (dom.editor.name) dom.editor.name.value = c.name;
+  if (dom.editor.type) dom.editor.type.value = c.profileType;
+  if (dom.editor.ppMax) dom.editor.ppMax.value = c.ppMax;
 
-  dom.editor.vigore.value = c.stats.vigore;
-  dom.editor.agilita.value = c.stats.agilita;
-  dom.editor.ingegno.value = c.stats.ingegno;
-  dom.editor.spirito.value = c.stats.spirito;
+  if (dom.editor.vigore) dom.editor.vigore.value = c.stats.vigore;
+  if (dom.editor.agilita) dom.editor.agilita.value = c.stats.agilita;
+  if (dom.editor.ingegno) dom.editor.ingegno.value = c.stats.ingegno;
+  if (dom.editor.spirito) dom.editor.spirito.value = c.stats.spirito;
 
-  dom.output.tempra.textContent = d.tempra;
-  dom.output.evasione.textContent = d.evasione;
-  dom.output.mente.textContent = d.mente;
-  dom.output.risolutezza.textContent = d.risolutezza;
-  dom.output.ppSpent.textContent = d.ppSpent;
-  dom.output.ppMax.textContent = c.ppMax;
+  if (dom.output.tempra) dom.output.tempra.textContent = d.tempra;
+  if (dom.output.evasione) dom.output.evasione.textContent = d.evasione;
+  if (dom.output.mente) dom.output.mente.textContent = d.mente;
+  if (dom.output.risolutezza) dom.output.risolutezza.textContent = d.risolutezza;
+  if (dom.output.ppSpent) dom.output.ppSpent.textContent = d.ppSpent;
+  if (dom.output.ppMax) dom.output.ppMax.textContent = c.ppMax;
 
-  dom.output.tempraLarge.textContent = d.tempra;
-  dom.output.evasioneLarge.textContent = d.evasione;
-  dom.output.menteLarge.textContent = d.mente;
-  dom.output.risolutezzaLarge.textContent = d.risolutezza;
+  if (dom.output.tempraLarge) dom.output.tempraLarge.textContent = d.tempra;
+  if (dom.output.evasioneLarge) dom.output.evasioneLarge.textContent = d.evasione;
+  if (dom.output.menteLarge) dom.output.menteLarge.textContent = d.mente;
+  if (dom.output.risolutezzaLarge) dom.output.risolutezzaLarge.textContent = d.risolutezza;
 
-  dom.output.ppSpent.classList.toggle("text-danger", d.ppSpent > c.ppMax);
-  dom.output.ppMax.classList.toggle("text-danger", d.ppSpent > c.ppMax);
+  if (dom.output.ppSpent) dom.output.ppSpent.classList.toggle("text-danger", d.ppSpent > c.ppMax);
+  if (dom.output.ppMax) dom.output.ppMax.classList.toggle("text-danger", d.ppSpent > c.ppMax);
 
-  dom.labels.saveStatus.textContent =
-    d.ppSpent > c.ppMax
-      ? "Attenzione: i PP spesi superano i PP Max."
-      : "Modifiche salvate localmente.";
+  if (dom.labels.saveStatus) {
+    dom.labels.saveStatus.textContent =
+      d.ppSpent > c.ppMax
+        ? "Attenzione: i PP spesi superano i PP Max."
+        : "Modifiche salvate localmente.";
+  }
 
   renderAbilities();
   renderTalents();
+  setTopbarCharacterContext(c);
+  updateFooter();
 }
 
 function updateChar() {
   const c = getActiveChar();
   if (!c) return;
 
-  c.name = dom.editor.name.value.trim() || "Nuovo personaggio";
-  c.profileType = dom.editor.type.value;
-  c.ppMax = toInt(dom.editor.ppMax.value, DEFAULT_PP_MAX);
+  c.name = dom.editor.name?.value.trim() || "Nuovo personaggio";
+  c.profileType = dom.editor.type?.value || "player";
+  c.ppMax = toInt(dom.editor.ppMax?.value, DEFAULT_PP_MAX);
 
-  c.stats.vigore = toInt(dom.editor.vigore.value, 0);
-  c.stats.agilita = toInt(dom.editor.agilita.value, 0);
-  c.stats.ingegno = toInt(dom.editor.ingegno.value, 0);
-  c.stats.spirito = toInt(dom.editor.spirito.value, 0);
+  c.stats.vigore = toInt(dom.editor.vigore?.value, 0);
+  c.stats.agilita = toInt(dom.editor.agilita?.value, 0);
+  c.stats.ingegno = toInt(dom.editor.ingegno?.value, 0);
+  c.stats.spirito = toInt(dom.editor.spirito?.value, 0);
 
   c.meta.updatedAt = new Date().toISOString();
 
@@ -392,7 +450,27 @@ function createChar() {
   saveAll();
   renderList();
   renderEditor();
+  setTopbarCharacterContext(c);
   show("editor");
+  updateFooter();
+}
+
+function createCharacterInList() {
+  const c = createEmptyCharacter();
+  state.characters.push(c);
+  c.meta.updatedAt = new Date().toISOString();
+  saveAll();
+  renderList();
+
+  // Focus sul nuovo input nome, se presente
+  requestAnimationFrame(() => {
+    const inputs = document.querySelectorAll(".character-card__name[data-id]");
+    const lastInput = inputs[inputs.length - 1];
+    if (lastInput) {
+      lastInput.focus();
+      lastInput.select();
+    }
+  });
 }
 
 function duplicateCharacter() {
@@ -410,7 +488,9 @@ function duplicateCharacter() {
   saveAll();
   renderList();
   renderEditor();
+  setTopbarCharacterContext(clone);
   show("editor");
+  updateFooter();
 }
 
 function deleteCharacter() {
@@ -431,64 +511,118 @@ function deleteCharacter() {
     show("editor");
   } else {
     openPlayerHome();
+    setTopbarUserContext();
   }
+
+  updateFooter();
+}
+
+function deleteCharacterFromList(characterId) {
+  const character = state.characters.find((c) => c.id === characterId);
+  if (!character) return;
+
+  const ok = window.confirm(`Vuoi davvero eliminare "${character.name}"?`);
+  if (!ok) return;
+
+  state.characters = state.characters.filter((c) => c.id !== characterId);
+
+  if (state.activeId === characterId) {
+    state.activeId = state.characters.length ? state.characters[0].id : null;
+  }
+
+  saveAll();
+  renderList();
 }
 
 function bindEvents() {
+  // Schermata ruolo
   dom.roleCards.forEach((card) => {
     card.addEventListener("click", () => {
       const role = card.dataset.role;
 
       if (role === "player") {
         openPlayerHome();
+        setTopbarUserContext();
+        updateFooter();
       }
 
       if (role === "gm") {
         openGMHome();
+        setTopbarUserContext();
+        updateFooter();
       }
     });
-    document.getElementById("footerEdit").onclick = () => {
-  if (state.ui.editMode) {
-    saveAll();
-    exitEditMode();
-  } else {
-    enterEditMode();
-  }
-};
-document.getElementById("addCharacterFloating").onclick = () => {
-  const c = createEmptyCharacter();
-  state.characters.push(c);
-  saveAll();
-  renderList();
-};
-document.getElementById("footerBack").onclick = openRoleScreen;
   });
 
-  if (dom.buttons.newChar) dom.buttons.newChar.onclick = createChar;
-  if (dom.buttons.save) dom.buttons.save.onclick = updateChar;
-  if (dom.buttons.home) dom.buttons.home.onclick = openRoleScreen;
+  // Header / nav principale
+  if (dom.buttons.home) {
+    dom.buttons.home.onclick = () => {
+      openRoleScreen();
+      setTopbarUserContext();
+      updateFooter();
+    };
+  }
 
+  // Home Giocatore - footer
+  if (dom.footer.edit) {
+    dom.footer.edit.onclick = () => {
+      if (state.ui.editMode) {
+        persistCharacterListEdits();
+        exitEditMode();
+      } else {
+        enterEditMode();
+      }
+    };
+  }
+
+  if (dom.footer.back) {
+    dom.footer.back.onclick = () => {
+      if (state.ui.editMode) {
+        const ok = window.confirm("Uscire dalla modifica senza salvare?");
+        if (!ok) return;
+        exitEditMode();
+      }
+
+      openRoleScreen();
+      setTopbarUserContext();
+      updateFooter();
+    };
+  }
+
+  // FAB aggiunta personaggio
+  if (dom.floating.addCharacter) {
+    dom.floating.addCharacter.onclick = createCharacterInList;
+  }
+
+  // Editor personaggio
+  if (dom.buttons.save) dom.buttons.save.onclick = updateChar;
   if (dom.buttons.addAbilityRow) dom.buttons.addAbilityRow.onclick = addAbilityRow;
   if (dom.buttons.toggleAbilitiesEdit) dom.buttons.toggleAbilitiesEdit.onclick = toggleAbilitiesEditMode;
-
   if (dom.buttons.addTalentRow) dom.buttons.addTalentRow.onclick = addTalentRow;
   if (dom.buttons.toggleTalentsEdit) dom.buttons.toggleTalentsEdit.onclick = toggleTalentsEditMode;
-
   if (dom.buttons.duplicateCharacter) dom.buttons.duplicateCharacter.onclick = duplicateCharacter;
   if (dom.buttons.deleteCharacter) dom.buttons.deleteCharacter.onclick = deleteCharacter;
 
-  dom.list.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-action]");
-    if (!button) return;
+  // Lista personaggi: delete in edit mode
+  if (dom.list) {
+    dom.list.addEventListener("click", (event) => {
+      const deleteBtn = event.target.closest(".character-delete");
+      if (deleteBtn) {
+        const characterId = deleteBtn.dataset.id;
+        deleteCharacterFromList(characterId);
+      }
+    });
 
-    if (button.dataset.action === "open") {
-      state.activeId = button.dataset.id;
-      saveAll();
-      renderEditor();
-      show("editor");
-    }
-  });
+    // Rename inline live nello state? No: salviamo solo con "Salva"
+    dom.list.addEventListener("input", (event) => {
+      const input = event.target.closest(".character-card__name[data-id]");
+      if (!input) return;
 
+      // Nessun salvataggio immediato: lasciamo il commit al bottone Salva
+    });
+  }
+
+  // Form editor base
   [
     dom.editor.name,
     dom.editor.type,
@@ -497,71 +631,70 @@ document.getElementById("footerBack").onclick = openRoleScreen;
     dom.editor.agilita,
     dom.editor.ingegno,
     dom.editor.spirito,
-  ].forEach((el) => {
-    el.addEventListener("input", updateChar);
-    el.addEventListener("change", updateChar);
-  });
+  ]
+    .filter(Boolean)
+    .forEach((el) => {
+      el.addEventListener("input", updateChar);
+      el.addEventListener("change", updateChar);
+    });
 
-  dom.abilitiesList.addEventListener("change", (event) => {
-    if (event.target.matches(".ability-name")) {
-      handleAbilityChange(event);
-    }
-  });
+  // Abilità
+  if (dom.abilitiesList) {
+    dom.abilitiesList.addEventListener("change", (event) => {
+      if (event.target.matches(".ability-name")) {
+        handleAbilityChange(event);
+      }
+    });
 
-  dom.abilitiesList.addEventListener("click", (event) => {
-    const plusBtn = event.target.closest(".ability-stepper--plus");
-    const minusBtn = event.target.closest(".ability-stepper--minus");
-    const deleteBtn = event.target.closest(".ability-delete");
+    dom.abilitiesList.addEventListener("click", (event) => {
+      const plusBtn = event.target.closest(".ability-stepper--plus");
+      const minusBtn = event.target.closest(".ability-stepper--minus");
+      const deleteBtn = event.target.closest(".ability-delete");
 
-    if (plusBtn) {
-      changeAbilityPoints(toInt(plusBtn.dataset.rowIndex, 0), +1);
-      return;
-    }
+      if (plusBtn) {
+        changeAbilityPoints(toInt(plusBtn.dataset.rowIndex, 0), +1);
+        return;
+      }
 
-    if (minusBtn) {
-      changeAbilityPoints(toInt(minusBtn.dataset.rowIndex, 0), -1);
-      return;
-    }
+      if (minusBtn) {
+        changeAbilityPoints(toInt(minusBtn.dataset.rowIndex, 0), -1);
+        return;
+      }
 
-    if (deleteBtn) {
-      deleteAbilityRow(toInt(deleteBtn.dataset.rowIndex, 0));
-    }
-  });
-
-  dom.talentsList.addEventListener("change", (event) => {
-    if (event.target.matches(".talent-family")) {
-      handleTalentFamilyChange(event);
-    }
-  });
-
-  dom.talentsList.addEventListener("click", (event) => {
-    const plusBtn = event.target.closest(".talent-stepper--plus");
-    const minusBtn = event.target.closest(".talent-stepper--minus");
-    const deleteBtn = event.target.closest(".talent-delete");
-
-    if (plusBtn) {
-      changeTalentRank(toInt(plusBtn.dataset.rowIndex, 0), +1);
-      return;
-    }
-
-    if (minusBtn) {
-      changeTalentRank(toInt(minusBtn.dataset.rowIndex, 0), -1);
-      return;
-    }
-
-    if (deleteBtn) {
-      deleteTalentRow(toInt(deleteBtn.dataset.rowIndex, 0));
-    }
-  });
-document.addEventListener("click", (event) => {
-  if (event.target.closest("#selectPlayerRole")) {
-    openPlayerHome();
+      if (deleteBtn) {
+        deleteAbilityRow(toInt(deleteBtn.dataset.rowIndex, 0));
+      }
+    });
   }
 
-  if (event.target.closest("#selectGMRole")) {
-    openGMHome();
+  // Talenti
+  if (dom.talentsList) {
+    dom.talentsList.addEventListener("change", (event) => {
+      if (event.target.matches(".talent-family")) {
+        handleTalentFamilyChange(event);
+      }
+    });
+
+    dom.talentsList.addEventListener("click", (event) => {
+      const plusBtn = event.target.closest(".talent-stepper--plus");
+      const minusBtn = event.target.closest(".talent-stepper--minus");
+      const deleteBtn = event.target.closest(".talent-delete");
+
+      if (plusBtn) {
+        changeTalentRank(toInt(plusBtn.dataset.rowIndex, 0), +1);
+        return;
+      }
+
+      if (minusBtn) {
+        changeTalentRank(toInt(minusBtn.dataset.rowIndex, 0), -1);
+        return;
+      }
+
+      if (deleteBtn) {
+        deleteTalentRow(toInt(deleteBtn.dataset.rowIndex, 0));
+      }
+    });
   }
-});
 }
 
 function initState() {
@@ -589,16 +722,21 @@ function initState() {
 async function init() {
   initState();
   bindEvents();
-  bindEditorTabs();
 
-  dom.labels.currentRole.textContent = "Giocatore";
-  dom.labels.storageMode.textContent = "Locale";
+  if (typeof bindEditorTabs === "function") {
+    bindEditorTabs();
+  }
+
+  if (dom.labels.currentRole) dom.labels.currentRole.textContent = "Giocatore";
+  if (dom.labels.storageMode) dom.labels.storageMode.textContent = "Locale";
 
   await loadAbilitiesCatalog();
   await loadTalentsCatalog();
 
+  setTopbarUserContext();
   renderList();
   show("role");
+  updateFooter();
 }
 
 init().catch((error) => {
