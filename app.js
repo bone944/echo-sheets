@@ -579,7 +579,7 @@ function bindEvents() {
   const gmRoleButton = document.getElementById("selectGMRole");
 
   if (playerRoleButton) {
-    erRoleButton.addEventListener("click", () => {
+    plaerRoleButton.addEventListener("click", () => {
     state.ui.currentArea = "player";
     openPlayerHome();
     setTopbarUserContext();
