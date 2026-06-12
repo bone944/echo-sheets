@@ -13,7 +13,7 @@
             :value="value"
             type="checkbox"
             :name="`${wwElementState.name}-${uniqueId}-${uid}`"
-            :class="content.checkbox && 'hidden'"
+            :class="{ 'ww-webapp-checkbox__native-input': content.checkbox }"
             :required="content.required"
             :disabled="isReadonly"
             v-bind="attributes"
@@ -194,12 +194,17 @@ export default {
     isolation: isolate;
     gap: var(--container-gap);
 
-    & .hidden {
+    &__native-input {
+        display: block;
+        visibility: visible;
         position: absolute;
-        top: 0;
-        left: 0;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
         opacity: 0;
         pointer-events: none;
+        cursor: pointer;
     }
 }
 </style>
