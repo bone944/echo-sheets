@@ -4,10 +4,11 @@ import app from '@/_front/main.js';
 // eslint-disable-next-line no-undef
 import element_1b1e2173_9b78_42cc_a8ee_a6167caea340 from '@/components/elements/element-1b1e2173-9b78-42cc-a8ee-a6167caea340/src/wwElement.vue';
 import element_1ba25bdf_dee9_4e0e_a0b8_b3f3128c3b65 from '@/components/elements/element-1ba25bdf-dee9-4e0e-a0b8-b3f3128c3b65/src/wwElement.vue';
-import element_3a7d6379_12d3_4387_98ff_b332bb492a63 from '@/components/elements/element-3a7d6379-12d3-4387-98ff-b332bb492a63/src/wwElement.vue';
+import element_2dff5957_3bd8_46f9_afa3_a5c5bab91931 from '@/components/elements/element-2dff5957-3bd8-46f9-afa3-a5c5bab91931/src/wwElement.vue';
 import element_57831abf_83ad_49ad_ba97_3bd30b035710 from '@/components/elements/element-57831abf-83ad-49ad-ba97-3bd30b035710/src/wwElement.vue';
 import element_59dca300_db78_42e4_a7a6_0cbf22d3cc82 from '@/components/elements/element-59dca300-db78-42e4-a7a6-0cbf22d3cc82/src/wwElement.vue';
 import element_6145eb60_0af8_4e52_bcc6_dc0f6743654e from '@/components/elements/element-6145eb60-0af8-4e52-bcc6-dc0f6743654e/./src/wwElement_Select.vue';
+import element_6d692ca2_6cdc_4805_aa0c_211102f335d0 from '@/components/elements/element-6d692ca2-6cdc-4805-aa0c-211102f335d0/src/wwElement.vue';
 import element_70a53858_53ca_40a5_ad88_c1cd33b5cc9f from '@/components/elements/element-70a53858-53ca-40a5-ad88-c1cd33b5cc9f/src/wwElement.vue';
 import element_97a63460_5c25_4d74_ac1f_86693c2e4a08 from '@/components/elements/element-97a63460-5c25-4d74-ac1f-86693c2e4a08/src/wwElement.vue';
 import element_a6cb6a4d_6af7_4cd6_b530_a15d9ec64488 from '@/components/elements/element-a6cb6a4d-6af7-4cd6-b530-a15d9ec64488/src/wwElement.vue';
@@ -21,10 +22,11 @@ import element_deb10a01_5eef_4aa1_9017_1b51c2ad6fd0 from '@/components/elements/
 // eslint-disable-next-line no-undef
 app.component('wwobject-1b1e2173-9b78-42cc-a8ee-a6167caea340', element_1b1e2173_9b78_42cc_a8ee_a6167caea340);
 app.component('wwobject-1ba25bdf-dee9-4e0e-a0b8-b3f3128c3b65', element_1ba25bdf_dee9_4e0e_a0b8_b3f3128c3b65);
-app.component('wwobject-3a7d6379-12d3-4387-98ff-b332bb492a63', element_3a7d6379_12d3_4387_98ff_b332bb492a63);
+app.component('wwobject-2dff5957-3bd8-46f9-afa3-a5c5bab91931', element_2dff5957_3bd8_46f9_afa3_a5c5bab91931);
 app.component('wwobject-57831abf-83ad-49ad-ba97-3bd30b035710', element_57831abf_83ad_49ad_ba97_3bd30b035710);
 app.component('wwobject-59dca300-db78-42e4-a7a6-0cbf22d3cc82', element_59dca300_db78_42e4_a7a6_0cbf22d3cc82);
 app.component('wwobject-6145eb60-0af8-4e52-bcc6-dc0f6743654e', element_6145eb60_0af8_4e52_bcc6_dc0f6743654e);
+app.component('wwobject-6d692ca2-6cdc-4805-aa0c-211102f335d0', element_6d692ca2_6cdc_4805_aa0c_211102f335d0);
 app.component('wwobject-70a53858-53ca-40a5-ad88-c1cd33b5cc9f', element_70a53858_53ca_40a5_ad88_c1cd33b5cc9f);
 app.component('wwobject-97a63460-5c25-4d74-ac1f-86693c2e4a08', element_97a63460_5c25_4d74_ac1f_86693c2e4a08);
 app.component('wwobject-a6cb6a4d-6af7-4cd6-b530-a15d9ec64488', element_a6cb6a4d_6af7_4cd6_b530_a15d9ec64488);
